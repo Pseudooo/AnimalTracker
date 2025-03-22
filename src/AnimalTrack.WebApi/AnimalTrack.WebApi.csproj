@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AnimalTrack.Repository\AnimalTrack.Repository.csproj" />
+      <ProjectReference Include="..\AnimalTrack.Services\AnimalTrack.Services.csproj" />
     </ItemGroup>
 
 </Project>

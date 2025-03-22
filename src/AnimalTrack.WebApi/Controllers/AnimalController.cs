@@ -1,14 +1,19 @@
+using AnimalTrack.ClientModels;
+using AnimalTrack.Services.Requests.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnimalTrack.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AnimalController : ControllerBase
+public class AnimalController(IMediator mediator) : ControllerBase
 {
-    [HttpGet]
-    public ActionResult<string> Foo()
+    [HttpPost("", Name = nameof(CreateAnimal))]
+    public async Task<ActionResult<AnimalModel>> CreateAnimal(string name, CancellationToken cancellationToken)
     {
-        return "woop";
+        var command = new CreateAnimalCommand(name);
+        var result = await mediator.Send(command, cancellationToken);
+        return result;
     }
 }
