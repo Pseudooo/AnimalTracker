@@ -1,8 +1,8 @@
-using System.Data.Common;
+using Npgsql;
 
 namespace AnimalTrack.Repository.Interfaces;
 
 public interface IPostgreSqlConnectionFactory
 {
-    DbConnection GetConnection();
+    NpgsqlConnection GetConnection();
 }

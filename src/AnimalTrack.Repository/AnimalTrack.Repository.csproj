@@ -22,4 +22,11 @@
       <PackageReference Include="Npgsql" Version="9.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Queries\**" />
+      <EmbeddedResource Include="Queries\**\*.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

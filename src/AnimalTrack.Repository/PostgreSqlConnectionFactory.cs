@@ -1,4 +1,3 @@
-using System.Data.Common;
 using AnimalTrack.Repository.Configuration;
 using AnimalTrack.Repository.Interfaces;
 using Microsoft.Extensions.Options;
@@ -8,7 +7,7 @@ namespace AnimalTrack.Repository;
 
 public class PostgreSqlConnectionFactory(IOptions<DatabaseConfiguration> databaseConfiguration) : IPostgreSqlConnectionFactory
 {
-    public DbConnection GetConnection()
+    public NpgsqlConnection GetConnection()
     {
         var connectionStringBuilder = new NpgsqlConnectionStringBuilder
         {
@@ -18,7 +17,6 @@ public class PostgreSqlConnectionFactory(IOptions<DatabaseConfiguration> databas
             Password = databaseConfiguration.Value.Password,
         };
         var connectionString = connectionStringBuilder.ConnectionString;
-        
         return new NpgsqlConnection(connectionString);
     }
 }
