@@ -1,5 +1,6 @@
 using AnimalTrack.ClientModels;
 using AnimalTrack.Services.Requests.Commands;
+using AnimalTrack.Services.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,4 +17,12 @@ public class AnimalController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command, cancellationToken);
         return result;
     }
-}
+
+    [HttpGet("{id}", Name = nameof(GetAnimalById))]
+    public async Task<ActionResult<AnimalModel>> GetAnimalById(int id, CancellationToken cancellationToken = default)
+    {
+        var query = new GetAnimalByIdQuery(id);
+        var result = await mediator.Send(query, cancellationToken);
+        return result;
+    }
+ }
