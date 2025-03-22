@@ -36,4 +36,32 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
 
         return animalEntity;
     }
+
+    public async Task<AnimalEntity> GetAnimalById(int id, CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@Id", id }
+        };
+        var query = await provider.GetAnimalByIdSqlText();
+        List<string> returnedColumns =
+        [
+            "Id", "Name", "CreatedAt",
+        ];
+        
+        var results = await sqlClient.RunQuery(
+            query,
+            parameters,
+            returnedColumns,
+            cancellationToken);
+        var result = results.Single();
+        
+        var animalEntity = new AnimalEntity()
+        {
+            Id = result["Id"] as int? ?? throw new InvalidDataException(nameof(result)),
+            Name = result["Name"] as string ?? throw new InvalidDataException(nameof(result)),
+            CreatedAt = result["CreatedAt"] as DateTime? ?? throw new InvalidDataException(nameof(result)),
+        };
+        return animalEntity;
+    }
 }

@@ -11,5 +11,10 @@ public class PostgreSqlQueryProvider : IPostgreSqlQueryProvider
     private static readonly Lazy<Task<string>> InsertAnimalQueryLazy = new(
         async () => await File.ReadAllTextAsync($"{QueryDirectoryPathLazy.Value}/insert_animal.sql"));
     
+    private static readonly Lazy<Task<string>> GetAnimalByIdQueryLazy = new(
+        async () => await File.ReadAllTextAsync($"{QueryDirectoryPathLazy.Value}/get_animal_by_id.sql"));
+    
     public async Task<string> GetInsertAnimalSqlText() => await InsertAnimalQueryLazy.Value;
+    
+    public async Task<string> GetAnimalByIdSqlText() => await GetAnimalByIdQueryLazy.Value;
 }

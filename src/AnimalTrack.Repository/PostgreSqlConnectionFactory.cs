@@ -15,6 +15,7 @@ public class PostgreSqlConnectionFactory(IOptions<DatabaseConfiguration> databas
             Database = databaseConfiguration.Value.Database,
             Username = databaseConfiguration.Value.User,
             Password = databaseConfiguration.Value.Password,
+            IncludeErrorDetail = true
         };
         var connectionString = connectionStringBuilder.ConnectionString;
         return new NpgsqlConnection(connectionString);
