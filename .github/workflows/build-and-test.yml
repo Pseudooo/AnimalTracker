@@ -1,0 +1,29 @@
+name: Build & Test
+on:
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  DOTNET_VERSION: 8.x.x
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: Restore
+        runs: dotnet restore
+        
+      - name: Build
+        runs: dotnet build --no-restore
+        
+      - name: Test
+        runs: dotnet test --no-restore --no-build
