@@ -69,8 +69,8 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         var rowsToSkip = (pageNumber - 1) * pageSize;
         var parameters = new Dictionary<string, object>()
         {
-            { "@Skip", rowsToSkip.ToString() },
-            { "@Take", pageSize.ToString() },
+            { "@Skip", rowsToSkip },
+            { "@Take", pageSize },
         };
         var query = await provider.GetAnimalPageSqlText();
         List<string> returnedColumns =
@@ -96,11 +96,11 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     
     private AnimalEntity MapAnimalEntityFromDictionary(IReadOnlyDictionary<string, object> columnValues)
     {
-        if(columnValues.TryGetValue("Id", out object? idValue) || idValue is not int id)
+        if(!columnValues.TryGetValue("Id", out object? idValue) || idValue is not int id)
             throw new InvalidDataException($"Unexpected value for {nameof(AnimalEntity)}.{nameof(AnimalEntity.Id)}");
-        if(columnValues.TryGetValue("Name", out object? nameValue) || nameValue is not string name)
+        if(!columnValues.TryGetValue("Name", out object? nameValue) || nameValue is not string name)
             throw new InvalidDataException($"Unexpected value for {nameof(AnimalEntity)}.{nameof(AnimalEntity.Name)}");
-        if(columnValues.TryGetValue("CreatedAt", out object? createdAtValue) || createdAtValue is not DateTime createdAt)
+        if(!columnValues.TryGetValue("CreatedAt", out object? createdAtValue) || createdAtValue is not DateTime createdAt)
             throw new InvalidDataException($"Unexpected format for {nameof(AnimalEntity)}.{nameof(AnimalEntity.CreatedAt)}");
 
         return new AnimalEntity

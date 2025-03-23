@@ -45,6 +45,7 @@ public class AnimalTests : IAsyncLifetime
 
     [Theory]
     [InlineData(1, "Alice")]
+    [InlineData(2, "Bob")]
     public async Task GivenKnownAnimalId_WhenGet_ShouldReturn200(int id, string expectedName)
     {
         // Arrange
@@ -54,10 +55,36 @@ public class AnimalTests : IAsyncLifetime
         var response = await _httpClient.GetAsync(uri);
         var animal = await response.Content.ReadFromJsonAsync<AnimalModel>();
         
+        // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         animal.ShouldNotBeNull();
         animal.Id.ShouldBe(id);
         animal.Name.ShouldBe(expectedName);
         animal.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)));
+    }
+
+    [Fact]
+    public async Task GivenAllAnimalsKnown_WhenGetPage_ShouldReturn200()
+    {
+        // Arrange
+        var uri = new Uri("Animal", UriKind.Relative);
+        
+        // Act
+        var response = await _httpClient.GetAsync(uri);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        
+        var animals = await response.Content.ReadFromJsonAsync<List<AnimalModel>>();
+        
+        // Assert
+        animals.ShouldNotBeNull();
+        animals.Count.ShouldBe(2);
+        
+        animals.ShouldContain(x => x.Id == 1);
+        var alice = animals.Single(x => x.Id == 1);
+        alice.Name.ShouldBe("Alice");
+        
+        animals.ShouldContain(x => x.Id == 1);
+        var bob = animals.Single(x => x.Id == 1);
+        bob.Name.ShouldBe("Alice");
     }
 }
