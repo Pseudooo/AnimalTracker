@@ -58,12 +58,56 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         if (result is null)
             return null;
         
-        var animalEntity = new AnimalEntity()
+        return MapAnimalEntityFromDictionary(result);
+    }
+
+    public async Task<List<AnimalEntity>> GetAnimalPage(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken = default)
+    {
+        var rowsToSkip = (pageNumber - 1) * pageSize;
+        var parameters = new Dictionary<string, object>()
         {
-            Id = result["Id"] as int? ?? throw new InvalidDataException(nameof(result)),
-            Name = result["Name"] as string ?? throw new InvalidDataException(nameof(result)),
-            CreatedAt = result["CreatedAt"] as DateTime? ?? throw new InvalidDataException(nameof(result)),
+            { "@Skip", rowsToSkip.ToString() },
+            { "@Take", pageSize.ToString() },
         };
-        return animalEntity;
+        var query = await provider.GetAnimalPageSqlText();
+        List<string> returnedColumns =
+        [
+            "Id", "Name", "CreatedAt"
+        ];
+        
+        var results = await sqlClient.RunQuery(
+            query,
+            parameters,
+            returnedColumns,
+            cancellationToken);
+
+        return MapAnimalEntitiesFromDictionaries(results);
+    }
+
+    private List<AnimalEntity> MapAnimalEntitiesFromDictionaries(
+        IReadOnlyCollection<IReadOnlyDictionary<string, object>> animalEntities)
+    {
+        return animalEntities.Select(MapAnimalEntityFromDictionary)
+            .ToList();
+    }
+    
+    private AnimalEntity MapAnimalEntityFromDictionary(IReadOnlyDictionary<string, object> columnValues)
+    {
+        if(columnValues.TryGetValue("Id", out object? idValue) || idValue is not int id)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalEntity)}.{nameof(AnimalEntity.Id)}");
+        if(columnValues.TryGetValue("Name", out object? nameValue) || nameValue is not string name)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalEntity)}.{nameof(AnimalEntity.Name)}");
+        if(columnValues.TryGetValue("CreatedAt", out object? createdAtValue) || createdAtValue is not DateTime createdAt)
+            throw new InvalidDataException($"Unexpected format for {nameof(AnimalEntity)}.{nameof(AnimalEntity.CreatedAt)}");
+
+        return new AnimalEntity
+        {
+            Id = id,
+            Name = name,
+            CreatedAt = createdAt,
+        };
     }
 }
