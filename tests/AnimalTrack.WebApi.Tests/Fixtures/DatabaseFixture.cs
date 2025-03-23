@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using AnimalTrack.Configuration;
 using AnimalTrack.Migrations;
 using AnimalTrack.Repository;
@@ -6,10 +7,12 @@ using Testcontainers.PostgreSql;
 
 namespace AnimalTrack.WebApi.Tests.Fixtures;
 
-public class DatabaseFixture(params List<string> databaseSeedScripts) : IAsyncDisposable
+public class DatabaseFixture(params string[] databaseSeedScripts) : IAsyncDisposable
 {
     private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
         .Build();
+
+    private readonly ImmutableArray<string> _databaseSeedScripts = [..databaseSeedScripts];
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
@@ -20,7 +23,7 @@ public class DatabaseFixture(params List<string> databaseSeedScripts) : IAsyncDi
         
         await using var connection = new NpgsqlConnection(databaseConfig.GetConnectionString());
         await connection.OpenAsync(cancellationToken);
-        foreach (var seedScript in databaseSeedScripts)
+        foreach (var seedScript in _databaseSeedScripts)
         {
             await using var command = connection.CreateCommand();
             command.CommandText = seedScript;

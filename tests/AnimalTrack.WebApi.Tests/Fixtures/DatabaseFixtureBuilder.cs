@@ -17,5 +17,5 @@ public class DatabaseFixtureBuilder
         return this;
     }
 
-    public DatabaseFixture Build() => new(_seedScripts);
+    public DatabaseFixture Build() => new(_seedScripts.ToArray());
 }
