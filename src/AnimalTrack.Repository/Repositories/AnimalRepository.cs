@@ -6,7 +6,7 @@ namespace AnimalTrack.Repository.Repositories;
 public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClient sqlClient)
     : IAnimalRepository
 {
-    public async Task<AnimalEntity> CreateAnimalAsync(string name, CancellationToken cancellationToken = default)
+    public async Task<AnimalEntity> InsertAnimal(string name, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 

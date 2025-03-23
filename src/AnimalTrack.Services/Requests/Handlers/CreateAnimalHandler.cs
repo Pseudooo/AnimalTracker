@@ -10,7 +10,7 @@ public class CreateAnimalHandler(IAnimalRepository animalRepository)
 {
     public async Task<AnimalModel> Handle(CreateAnimalCommand request, CancellationToken cancellationToken)
     {
-        var animalEntity = await animalRepository.CreateAnimalAsync(request.Name, cancellationToken);
+        var animalEntity = await animalRepository.InsertAnimal(request.Name, cancellationToken);
         return new AnimalModel()
         {
             Id = animalEntity.Id,
