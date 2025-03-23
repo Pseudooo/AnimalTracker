@@ -12,6 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Services", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.ClientModels", "src\AnimalTrack.ClientModels\AnimalTrack.ClientModels.csproj", "{0B46EC3D-38FE-450C-B8F9-F318A52D9C00}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{31D60F5B-BAF0-4628-8816-9E7301E93E08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Tests", "tests\AnimalTrack.WebApi.Tests\AnimalTrack.WebApi.Tests.csproj", "{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Configuration", "src\AnimalTrack.Configuration\AnimalTrack.Configuration.csproj", "{E6734129-34D9-4924-9D6C-D93845F8E825}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +29,8 @@ Global
 		{211EF0FA-3AA7-4D84-9D46-7CDCE1B6F5B2} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
 		{B401EC8D-E9B7-4B66-A4D7-7AE53788FEB8} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
 		{0B46EC3D-38FE-450C-B8F9-F318A52D9C00} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
+		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
+		{E6734129-34D9-4924-9D6C-D93845F8E825} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0137A1FE-4B49-4869-B9F9-9A5899C73197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -45,5 +53,13 @@ Global
 		{0B46EC3D-38FE-450C-B8F9-F318A52D9C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B46EC3D-38FE-450C-B8F9-F318A52D9C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B46EC3D-38FE-450C-B8F9-F318A52D9C00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6734129-34D9-4924-9D6C-D93845F8E825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6734129-34D9-4924-9D6C-D93845F8E825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6734129-34D9-4924-9D6C-D93845F8E825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6734129-34D9-4924-9D6C-D93845F8E825}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

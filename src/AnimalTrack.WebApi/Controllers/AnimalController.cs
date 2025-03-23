@@ -23,6 +23,9 @@ public class AnimalController(IMediator mediator) : ControllerBase
     {
         var query = new GetAnimalByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
+        if(result is null)
+            return NotFound();
+        
         return result;
     }
  }

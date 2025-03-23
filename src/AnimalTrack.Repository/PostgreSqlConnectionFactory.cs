@@ -1,20 +1,20 @@
-using AnimalTrack.Repository.Configuration;
+using AnimalTrack.Configuration;
 using AnimalTrack.Repository.Interfaces;
-using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace AnimalTrack.Repository;
 
-public class PostgreSqlConnectionFactory(IOptions<DatabaseConfiguration> databaseConfiguration) : IPostgreSqlConnectionFactory
+public class PostgreSqlConnectionFactory(DatabaseConfiguration databaseConfiguration) : IPostgreSqlConnectionFactory
 {
     public NpgsqlConnection GetConnection()
     {
         var connectionStringBuilder = new NpgsqlConnectionStringBuilder
         {
-            Host = databaseConfiguration.Value.Host,
-            Database = databaseConfiguration.Value.Database,
-            Username = databaseConfiguration.Value.User,
-            Password = databaseConfiguration.Value.Password,
+            Host = databaseConfiguration.Host,
+            Port = databaseConfiguration.Port,
+            Database = databaseConfiguration.Database,
+            Username = databaseConfiguration.Username,
+            Password = databaseConfiguration.Password,
 #if DEBUG
             IncludeErrorDetail = true
 #endif

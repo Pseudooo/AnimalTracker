@@ -1,38 +1,47 @@
+using AnimalTrack.Configuration;
 using AnimalTrack.Repository;
-using AnimalTrack.Repository.Configuration;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Repository.Providers;
 using AnimalTrack.Repository.Repositories;
 using AnimalTrack.Services.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace AnimalTrack.WebApi;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-
-RegisterRepositoryDependencies(builder.Services, builder.Configuration);
-builder.Services.RegisterServiceDependencies();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-app.UseHttpsRedirection();
-app.MapControllers();
-app.Run();
-return;
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
 
-void RegisterRepositoryDependencies(IServiceCollection services, IConfiguration configuration)
-{
-    var repositoryConfiguration = configuration.GetSection("Repository:Database");
-    services.Configure<DatabaseConfiguration>(repositoryConfiguration);
-    services.AddTransient<IPostgreSqlConnectionFactory, PostgreSqlConnectionFactory>();
-    services.AddTransient<IPostgreSqlClient, PostgreSqlClient>();
-    services.AddTransient<IPostgreSqlQueryProvider, PostgreSqlQueryProvider>();
-    services.AddTransient<IAnimalRepository, AnimalRepository>();
+        RegisterRepositoryDependencies(builder.Services, builder.Configuration);
+        builder.Services.RegisterServiceDependencies();
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+        app.MapControllers();
+        app.Run();
+        return;
+
+        void RegisterRepositoryDependencies(IServiceCollection services, IConfiguration configuration)
+        {
+            var databaseConfiguration = configuration.GetSection("Repository:Database")
+                .Get<DatabaseConfiguration>()!;
+            services.AddSingleton(databaseConfiguration);
+            services.AddTransient<IPostgreSqlConnectionFactory, PostgreSqlConnectionFactory>();
+            services.AddTransient<IPostgreSqlClient, PostgreSqlClient>();
+            services.AddTransient<IPostgreSqlQueryProvider, PostgreSqlQueryProvider>();
+            services.AddTransient<IAnimalRepository, AnimalRepository>();
+        }
+    }
 }

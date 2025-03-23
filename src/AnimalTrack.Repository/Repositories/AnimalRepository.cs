@@ -37,7 +37,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return animalEntity;
     }
 
-    public async Task<AnimalEntity> GetAnimalById(int id, CancellationToken cancellationToken = default)
+    public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object>()
         {
@@ -54,7 +54,9 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
             parameters,
             returnedColumns,
             cancellationToken);
-        var result = results.Single();
+        var result = results.SingleOrDefault();
+        if (result is null)
+            return null;
         
         var animalEntity = new AnimalEntity()
         {
