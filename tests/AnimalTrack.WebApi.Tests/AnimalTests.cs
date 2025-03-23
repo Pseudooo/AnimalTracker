@@ -43,11 +43,12 @@ public class AnimalTests : IAsyncLifetime
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
-    [Fact]
-    public async Task GivenKnownAnimalId_WhenGet_ShouldReturn200()
+    [Theory]
+    [InlineData(1, "Alice")]
+    public async Task GivenKnownAnimalId_WhenGet_ShouldReturn200(int id, string expectedName)
     {
         // Arrange
-        var uri = new Uri("Animal/1", UriKind.Relative);
+        var uri = new Uri($"Animal/{id}", UriKind.Relative);
         
         // Act
         var response = await _httpClient.GetAsync(uri);
@@ -55,8 +56,8 @@ public class AnimalTests : IAsyncLifetime
         
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         animal.ShouldNotBeNull();
-        animal.Id.ShouldBe(1);
-        animal.Name.ShouldBe("Alice");
+        animal.Id.ShouldBe(id);
+        animal.Name.ShouldBe(expectedName);
         animal.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)));
     }
 }
