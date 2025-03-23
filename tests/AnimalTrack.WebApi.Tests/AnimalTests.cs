@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Http.Json;
+using AnimalTrack.ClientModels;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
 using Xunit;
@@ -13,7 +15,9 @@ public class AnimalTests : IAsyncLifetime
     
     public async Task InitializeAsync()
     {
-        _databaseFixture = new DatabaseFixture();
+        _databaseFixture = new DatabaseFixtureBuilder()
+            .WithSeedScript("seed_animals.sql")
+            .Build();
         await _databaseFixture.StartAsync();
         
         _animalTrackFixture = new AnimalTrackFixture(_databaseFixture.GetDatabaseConfiguration());
@@ -37,5 +41,23 @@ public class AnimalTests : IAsyncLifetime
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Theory]
+    [InlineData(1, "Alice")]
+    public async Task GivenKnownAnimalId_WhenGet_ShouldReturn200(int id, string expectedName)
+    {
+        // Arrange
+        var uri = new Uri($"Animal/{id}", UriKind.Relative);
+        
+        // Act
+        var response = await _httpClient.GetAsync(uri);
+        var animal = await response.Content.ReadFromJsonAsync<AnimalModel>();
+        
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        animal.ShouldNotBeNull();
+        animal.Id.ShouldBe(id);
+        animal.Name.ShouldBe(expectedName);
+        animal.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)));
     }
 }
