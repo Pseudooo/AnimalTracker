@@ -28,4 +28,15 @@ public class AnimalController(IMediator mediator) : ControllerBase
         
         return result;
     }
+
+    [HttpGet("", Name = nameof(GetAnimalPage))]
+    public async Task<ActionResult<List<AnimalModel>>> GetAnimalPage(
+        int pageNumber = 1,
+        int pageSize = 30,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetAnimalPageQuery(pageNumber, pageSize);
+        var result = await mediator.Send(query, cancellationToken);
+        return result;
+    }
  }
