@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Services", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.ClientModels", "src\AnimalTrack.ClientModels\AnimalTrack.ClientModels.csproj", "{0B46EC3D-38FE-450C-B8F9-F318A52D9C00}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{31D60F5B-BAF0-4628-8816-9E7301E93E08}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{31D60F5B-BAF0-4628-8816-9E7301E93E08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Tests", "tests\AnimalTrack.WebApi.Tests\AnimalTrack.WebApi.Tests.csproj", "{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83}"
 EndProject
