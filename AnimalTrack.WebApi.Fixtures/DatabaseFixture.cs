@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using AnimalTrack.Configuration;
 using AnimalTrack.Migrations;
-using AnimalTrack.Repository;
 using Npgsql;
 using Testcontainers.PostgreSql;
 
@@ -17,12 +16,22 @@ public class DatabaseFixture(params string[] databaseSeedScripts) : IAsyncDispos
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         await _postgreSqlContainer.StartAsync(cancellationToken);
-        
+
         var databaseConfig = GetDatabaseConfiguration();
         AnimalTrackMigrationRunner.Run(databaseConfig);
-        
-        await using var connection = new NpgsqlConnection(databaseConfig.GetConnectionString());
+
+        var connectionString = new NpgsqlConnectionStringBuilder()
+            {
+                Host = databaseConfig.Host,
+                Port = databaseConfig.Port,
+                Database = databaseConfig.Database,
+                Username = databaseConfig.Username,
+                Password = databaseConfig.Password,
+            }
+            .ToString();
+        await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(cancellationToken);
+        
         foreach (var seedScript in _databaseSeedScripts)
         {
             await using var command = connection.CreateCommand();

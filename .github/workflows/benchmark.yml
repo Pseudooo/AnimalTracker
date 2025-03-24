@@ -1,0 +1,35 @@
+name: Benchmark Runner
+on:
+  issue_comment:
+    types: [created]
+    
+env:
+  DOTNET_VERSION: 8.x.x
+  
+jobs:
+  ensure-invoked:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/benchmark')}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+      - name: Run Benchmark
+        working-directory: ./benchmarks/AnimalTrack.Repository.Benchmarks
+        run: dotnet run -c Release
+
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })

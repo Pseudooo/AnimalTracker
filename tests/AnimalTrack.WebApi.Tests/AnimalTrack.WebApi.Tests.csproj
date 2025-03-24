@@ -32,6 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj" />
       <ProjectReference Include="..\..\src\AnimalTrack.Migrations\AnimalTrack.Migrations.csproj" />
       <ProjectReference Include="..\..\src\AnimalTrack.WebApi\AnimalTrack.WebApi.csproj" />
     </ItemGroup>

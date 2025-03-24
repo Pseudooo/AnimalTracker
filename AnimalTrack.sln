@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Configuration", "src\AnimalTrack.Configuration\AnimalTrack.Configuration.csproj", "{E6734129-34D9-4924-9D6C-D93845F8E825}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{008731D6-9371-4F9C-A5C8-F822D274D269}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Repository.Benchmarks", "Benchmarks\AnimalTrack.Repository.Benchmarks\AnimalTrack.Repository.Benchmarks.csproj", "{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Fixtures", "AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj", "{0F5C44B9-27F0-425B-884A-F54E987A7A05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +37,8 @@ Global
 		{0B46EC3D-38FE-450C-B8F9-F318A52D9C00} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
 		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
 		{E6734129-34D9-4924-9D6C-D93845F8E825} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
+		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24} = {008731D6-9371-4F9C-A5C8-F822D274D269}
+		{0F5C44B9-27F0-425B-884A-F54E987A7A05} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0137A1FE-4B49-4869-B9F9-9A5899C73197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -61,5 +69,13 @@ Global
 		{E6734129-34D9-4924-9D6C-D93845F8E825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6734129-34D9-4924-9D6C-D93845F8E825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6734129-34D9-4924-9D6C-D93845F8E825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F5C44B9-27F0-425B-884A-F54E987A7A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5C44B9-27F0-425B-884A-F54E987A7A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5C44B9-27F0-425B-884A-F54E987A7A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5C44B9-27F0-425B-884A-F54E987A7A05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
