@@ -12,8 +12,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj" />
       <ProjectReference Include="..\..\src\AnimalTrack.Repository\AnimalTrack.Repository.csproj" />
+      <ProjectReference Include="..\..\tests\AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj" />
     </ItemGroup>
 
     <ItemGroup>
