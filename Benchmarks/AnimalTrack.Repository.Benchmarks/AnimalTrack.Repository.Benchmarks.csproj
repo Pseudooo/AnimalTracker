@@ -4,10 +4,22 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj" />
+      <ProjectReference Include="..\..\src\AnimalTrack.Repository\AnimalTrack.Repository.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="SeedScripts\seed_1k_animals.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
