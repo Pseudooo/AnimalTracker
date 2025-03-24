@@ -8,9 +8,22 @@ env:
   
 jobs:
   ensure-invoked:
+    permissions: write-all
     runs-on: ubuntu-latest
     if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/benchmark')}}
     steps:
+      - name: Acknowledge Benchmark Request
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |       
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Running Benchmark | [link](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+            })
+        
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -27,7 +40,7 @@ jobs:
 
       - uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ github.token }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
