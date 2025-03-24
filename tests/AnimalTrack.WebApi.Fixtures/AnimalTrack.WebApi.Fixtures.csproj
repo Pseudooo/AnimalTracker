@@ -5,14 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="Npgsql" Version="9.0.3" />
         <PackageReference Include="Testcontainers.PostgreSql" Version="4.3.0" />
     </ItemGroup>
-
+    
     <ItemGroup>
-      <ProjectReference Include="..\src\AnimalTrack.Migrations\AnimalTrack.Migrations.csproj" />
+      <ProjectReference Include="..\..\src\AnimalTrack.Migrations\AnimalTrack.Migrations.csproj" />
     </ItemGroup>
     
 </Project>
