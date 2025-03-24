@@ -18,16 +18,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --no-restore -c Release
         
       - name: Run Benchmark
         working-directory: ./benchmarks/AnimalTrack.Repository.Benchmarks
-        run: dotnet run --no-restore --no-build -c Release
+        run: dotnet run -c Release
 
       - uses: actions/github-script@v7
         with:
