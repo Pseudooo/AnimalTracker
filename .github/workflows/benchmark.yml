@@ -44,4 +44,5 @@ jobs:
           tool: 'benchmarkdotnet'
           output-file-path: Benchmarks/AnimalTrack.Repository.Benchmarks/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report-full-compressed.json
           comment-always: 'true'
+          summary-always: 'true'
           github-token: ${{ github.token }}
