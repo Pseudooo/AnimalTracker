@@ -7,10 +7,11 @@ on:
 
 env:
   DOTNET_VERSION: 8.x.x
-  
+
+permissions: write-all  
+
 jobs:
   ensure-invoked:
-    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Acknowledge Benchmark Request
