@@ -7,29 +7,10 @@ using Xunit;
 
 namespace AnimalTrack.WebApi.Tests;
 
-public class AnimalTests : IAsyncLifetime
+public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<AnimalTrackFixture>
 {
-    private DatabaseFixture _databaseFixture = null!;
-    private AnimalTrackFixture _animalTrackFixture = null!;
-    private HttpClient _httpClient = null!;
+    private readonly HttpClient _httpClient = animalTrackFixture.CreateClient();
     
-    public async Task InitializeAsync()
-    {
-        _databaseFixture = new DatabaseFixtureBuilder()
-            .WithSeedScript("seed_animals.sql")
-            .Build();
-        await _databaseFixture.StartAsync();
-        
-        _animalTrackFixture = new AnimalTrackFixture(_databaseFixture.GetDatabaseConfiguration());
-        _httpClient = _animalTrackFixture.CreateClient();
-    }
-
-    public async Task DisposeAsync()
-    {
-        await _databaseFixture.DisposeAsync();
-        await _animalTrackFixture.DisposeAsync();
-    }
-
     [Fact]
     public async Task GivenUnknownAnimalId_WhenGet_ShouldReturn404()
     {
