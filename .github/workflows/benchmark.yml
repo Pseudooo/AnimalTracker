@@ -43,6 +43,6 @@ jobs:
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'benchmarkdotnet'
-          output-file-path: Benchmarks/AnimalTrack.Repository.Benchmarks/bin/Release/net8.0/BenchmarkDotnNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json
+          output-file-path: Benchmarks/AnimalTrack.Repository.Benchmarks/bin/Release/net8.0/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json
           comment-always: 'true'
           github-token: ${{ github.token }}
