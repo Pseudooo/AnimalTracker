@@ -35,6 +35,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           
+      - name: Run Benchmark
+        working-directory: Benchmarks/AnimalTrack.Repository.Benchmarks
+        run: dotnet run -c Release
+          
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
