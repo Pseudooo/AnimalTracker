@@ -2,6 +2,7 @@ using AnimalTrack.Repository.Entities;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Repository.Providers;
 using AnimalTrack.Repository.Repositories;
+using AnimalTrack.WebApi.Fixtures;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using BenchmarkDotNet.Attributes;
 

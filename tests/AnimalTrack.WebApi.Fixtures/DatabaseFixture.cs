@@ -4,7 +4,7 @@ using AnimalTrack.Migrations;
 using Npgsql;
 using Testcontainers.PostgreSql;
 
-namespace AnimalTrack.WebApi.Tests.Fixtures;
+namespace AnimalTrack.WebApi.Fixtures;
 
 public class DatabaseFixture(params string[] databaseSeedScripts) : IAsyncDisposable
 {

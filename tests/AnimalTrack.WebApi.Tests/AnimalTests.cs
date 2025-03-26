@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using AnimalTrack.ClientModels;
+using AnimalTrack.WebApi.Fixtures;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
 using Xunit;

@@ -1,4 +1,5 @@
 using System.Reflection;
+using AnimalTrack.WebApi.Fixtures;
 
 namespace AnimalTrack.WebApi.Tests.Fixtures;
 
