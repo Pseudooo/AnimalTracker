@@ -36,13 +36,12 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           
       - name: Run Benchmark
-        working-directory: Benchmarks/AnimalTrack.Repository.Benchmarks
-        run: dotnet run -c Release
+        run: cd Benchmarks/AnimalTrack.Repository.Benchmarks && dotnet run -c Release --exporters json
           
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'benchmarkdotnet'
-          output-file-path: Benchmarks/AnimalTrack.Repository.Benchmarks/bin/Release/net8.0/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json
+          output-file-path: Benchmarks/AnimalTrack.Repository.Benchmarks/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json
           comment-always: 'true'
           github-token: ${{ github.token }}
