@@ -7,7 +7,8 @@ using BenchmarkDotNet.Attributes;
 
 namespace AnimalTrack.Repository.Benchmarks;
 
-[JsonExporter]
+[JsonExporterAttribute.Full]
+[JsonExporterAttribute.FullCompressed]
 [MemoryDiagnoser]
 public class ReadAnimalsBenchmark
 {
