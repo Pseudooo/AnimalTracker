@@ -54,7 +54,7 @@ jobs:
             
             let commentContent = '|Benchmark|Mean|Gen0|Gen1|Gen2|Allocations\n';
             commentContent += '|---|---|--|--|--|--|\n';
-            commentContent += `| ${benchmark['Type']} | ${benchmarkStats['Mean'] | ${memory['Gen0Collections'] | ${memory['Gen1Collections']} | memory['Gen2Collections'] | memory['BytesAllocatedPerOperation']}}`
+            commentContent += `| ${benchmark['Type']} | ${benchmarkStats['Mean']} | ${memory['Gen0Collections']} | ${memory['Gen1Collections']} | ${memory['Gen2Collections']} | ${memory['BytesAllocatedPerOperation']} |`
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
