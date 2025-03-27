@@ -6,6 +6,10 @@ public interface IAnimalRepository
 {
     public Task<AnimalEntity> InsertAnimal(string name, CancellationToken cancellationToken = default);
     Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default);
+
+    Task<List<AnimalNoteEntity>> GetAnimalNotes(
+        int animalId,
+        CancellationToken cancellationToken = default);
     Task<List<AnimalEntity>> GetAnimalPage(
         int pageNumber,
         int pageSize,

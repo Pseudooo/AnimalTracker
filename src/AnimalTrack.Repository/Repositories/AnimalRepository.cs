@@ -61,6 +61,29 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return MapAnimalEntityFromDictionary(result);
     }
 
+    public async Task<List<AnimalNoteEntity>> GetAnimalNotes(
+        int animalId,
+        CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@Id", animalId },
+        };
+        var query = await provider.GetAnimalNotesSqlText();
+        List<string> returnedColumns =
+        [
+            "Id", "Note", "CreatedAt",
+        ];
+        
+        var results = await sqlClient.RunQuery(
+            query,
+            parameters,
+            returnedColumns,
+            cancellationToken);
+
+        return MapAnimalNoteEntitiesFromDictionaries(results);
+    }
+
     public async Task<List<AnimalEntity>> GetAnimalPage(
         int pageNumber,
         int pageSize,
@@ -126,6 +149,28 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         {
             Id = id,
             Name = name,
+            CreatedAt = createdAt,
+        };
+    }
+    
+    private List<AnimalNoteEntity> MapAnimalNoteEntitiesFromDictionaries(
+        IReadOnlyCollection<IReadOnlyDictionary<string, object>> animalNoteEntityDictionaries)
+        => animalNoteEntityDictionaries.Select(MapAnimalNoteEntityFromDictionary)
+            .ToList();
+
+    private AnimalNoteEntity MapAnimalNoteEntityFromDictionary(IReadOnlyDictionary<string, object> columnValues)
+    {
+        if(!columnValues.TryGetValue("Id", out var idValue) || idValue is not int id)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalNoteEntity)}.{nameof(AnimalNoteEntity.Id)}");
+        if(!columnValues.TryGetValue("Note", out var noteValue) || noteValue is not string note)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalNoteEntity)}.{nameof(AnimalNoteEntity.Note)}");
+        if(!columnValues.TryGetValue("CreatedAt", out var createdAtValue) || createdAtValue is not DateTime createdAt)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalNoteEntity)}.{nameof(AnimalNoteEntity.CreatedAt)}");
+
+        return new AnimalNoteEntity()
+        {
+            Id = id,
+            Note = note,
             CreatedAt = createdAt,
         };
     }
