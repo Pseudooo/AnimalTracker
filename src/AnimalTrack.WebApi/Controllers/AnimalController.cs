@@ -41,4 +41,22 @@ public class AnimalController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(query, cancellationToken);
         return result;
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAnimal(
+        int id, 
+        [FromBody] string name,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateAnimalCommand(id, name);
+        var success = await mediator.Send(command, cancellationToken);
+        if (success)
+        {
+            return NoContent();
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
  }
