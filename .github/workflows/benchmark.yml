@@ -43,6 +43,6 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            const script = require('./github/scripts/commentBenchmarkResults.js');
+            const script = require('./.github/scripts/commentBenchmarkResults.js');
             script({github, context});
             
