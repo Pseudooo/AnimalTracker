@@ -43,21 +43,6 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            const fs = require('node:fs');
-            const filePath = 'Benchmarks/AnimalTrack.Repository.Benchmarks/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json';
-            const fileContent = fs.readFileSync(filePath, 'utf8');
-            const parsedFileContent = JSON.parse(fileContent);
-            const benchmark = parsedFileContent['Benchmarks'][0];
-            const benchmarkStats = benchmark['Statistics'];
-            const memory = benchmark['Memory'];
-            
-            let commentContent = '|Benchmark|Mean|Gen0|Gen1|Gen2|Allocations|\n';
-            commentContent += '|---|---|--|--|--|--|\n';
-            commentContent += `| ${benchmark['Type']} | ${benchmarkStats['Mean']} | ${memory['Gen0Collections']} | ${memory['Gen1Collections']} | ${memory['Gen2Collections']} | ${memory['BytesAllocatedPerOperation']} |`
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: commentContent
-            })
+            const script = require('./github/scripts/commentBenchmarkResults.js');
+            script({github, context});
             
