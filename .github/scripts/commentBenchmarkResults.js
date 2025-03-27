@@ -24,9 +24,9 @@ function loadBenchmarkResults() {
         const result = {
             name: benchmark['Type'],
             mean: formatTime(stats['Mean']),
-            gen0: memory['Gen0'],
-            gen1: memory['Gen1'],
-            gen2: memory['Gen2'],
+            gen0: memory['Gen0Collections'],
+            gen1: memory['Gen1Collections'],
+            gen2: memory['Gen2Collections'],
             allocated: formatBytes(memory['BytesAllocatedPerOperation']),
         }
         results.push(result);
