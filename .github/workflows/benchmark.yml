@@ -13,7 +13,6 @@ jobs:
   ensure-invoked:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/benchmark')}}
     steps:
       - name: Acknowledge Benchmark Request
         uses: actions/github-script@v7
