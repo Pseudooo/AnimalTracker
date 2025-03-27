@@ -8,6 +8,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace AnimalTrack.Repository.Benchmarks;
 
+[JsonExporter]
 [MemoryDiagnoser]
 public class ReadAnimalsBenchmark
 {
