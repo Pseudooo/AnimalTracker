@@ -40,6 +40,20 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         return await IterateReader(reader, returnedColumns, cancellationToken);
     }
 
+    public async Task<int> RunUpdate(
+        string query,
+        IReadOnlyDictionary<string, object> parameters,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query, nameof(query));
+        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
+        
+        await using var connection = await GetOpenConnection(cancellationToken);
+        await using var command = CreateCommand(connection, query, parameters);
+        var count = await command.ExecuteNonQueryAsync(cancellationToken);
+        return count;
+    }
+
     private async Task<NpgsqlConnection> GetOpenConnection(CancellationToken cancellationToken)
     {
         var connection = connectionFactory.GetConnection();
