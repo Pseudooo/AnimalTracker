@@ -45,7 +45,6 @@ jobs:
           github-token: ${{ github.token }}
           script: |
             const fs = require('node:fs');
-                              Benchmarks/AnimalTrack.Repository.Benchmarks/bin/Release/net8.0/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json
             const filePath = 'Benchmarks/AnimalTrack.Repository.Benchmarks/bin/Release/net8.0/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json';
             const fileContent = fs.readFileSync(filePath, 'utf8');
             const parsedFileContent = JSON.parse(fileContent);
