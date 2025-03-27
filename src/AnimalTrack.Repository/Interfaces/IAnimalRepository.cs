@@ -10,4 +10,5 @@ public interface IAnimalRepository
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken = default);
+    Task<bool> UpdateAnimal(int animalId, string name, CancellationToken cancellationToken = default);
 }

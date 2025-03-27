@@ -87,6 +87,25 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return MapAnimalEntitiesFromDictionaries(results);
     }
 
+    public async Task<bool> UpdateAnimal(int animalId, string name, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(animalId, nameof(animalId));
+
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@Id", animalId },
+            { "@Name", name }
+        };
+        var query = await provider.GetUpdateAnimalSqlText();
+
+        var updated = await sqlClient.RunUpdate(
+            query,
+            parameters,
+            cancellationToken);
+        
+        return updated == 1;
+    }
+
     private List<AnimalEntity> MapAnimalEntitiesFromDictionaries(
         IReadOnlyCollection<IReadOnlyDictionary<string, object>> animalEntities)
     {
