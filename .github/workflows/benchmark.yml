@@ -2,7 +2,10 @@ name: Benchmark Runner
 on:
   issue_comment:
     types: [created]
-    
+  pull_request: 
+    branches:
+      - master
+
 env:
   DOTNET_VERSION: 8.x.x
   
