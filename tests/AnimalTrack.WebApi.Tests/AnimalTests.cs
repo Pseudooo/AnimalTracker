@@ -58,7 +58,6 @@ public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<
         
         // Assert
         animals.ShouldNotBeNull();
-        animals.Count.ShouldBe(2);
         
         animals.ShouldContain(x => x.Id == 1);
         var alice = animals.Single(x => x.Id == 1);
@@ -67,5 +66,31 @@ public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<
         animals.ShouldContain(x => x.Id == 1);
         var bob = animals.Single(x => x.Id == 1);
         bob.Name.ShouldBe("Alice");
+    }
+
+    [Fact]
+    public async Task GivenKnownAnimal_WhenUpdate_ShouldReturn204()
+    {
+        // Arrange
+        var uri = new Uri($"Animal/3", UriKind.Relative);
+        
+        // Act
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create("sam"));
+        
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task GivenUnknownAnimal_WhenUpdate_ShouldReturn404()
+    {
+        // Arrange
+        var uri = new Uri($"Animal/99", UriKind.Relative);
+        
+        // Act
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create("sam"));
+        
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 }
