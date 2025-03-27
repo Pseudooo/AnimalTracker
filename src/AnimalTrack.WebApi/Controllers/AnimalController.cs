@@ -1,6 +1,7 @@
 using AnimalTrack.ClientModels;
 using AnimalTrack.Services.Requests.Commands;
 using AnimalTrack.Services.Requests.Queries;
+using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace AnimalTrack.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[ApiVersion("1.0")]
 public class AnimalController(IMediator mediator) : ControllerBase
 {
     [HttpPost("", Name = nameof(CreateAnimal))]
