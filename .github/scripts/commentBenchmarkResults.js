@@ -22,12 +22,12 @@ function loadBenchmarkResults() {
         const stats = benchmark['Statistics'];
         const memory = benchmark['Memory'];
         const result = {
-            name: benchmark['Name'],
-            mean: stats['Mean'],
+            name: benchmark['Type'],
+            mean: formatTime(stats['Mean']),
             gen0: memory['Gen0'],
             gen1: memory['Gen1'],
             gen2: memory['Gen2'],
-            allocated: memory['BytesAllocatedPerOperation'],
+            allocated: formatBytes(memory['BytesAllocatedPerOperation']),
         }
         results.push(result);
     }
@@ -44,4 +44,30 @@ function formatResultsAsGithubTable(results) {
     }
     
     return commentContent;
+}
+
+function formatBytes(bytesString) {
+    const decimals = 2;
+    const bytes = parseFloat(bytesString);
+    
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'Kb', 'Mb', 'Gb']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
+function formatTime(nanosecondsString) {
+    const decimals = 2;
+    const nanoseconds = parseFloat(nanosecondsString);
+    
+    const k = 1000;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['ns', 'us', 'ms', 's'];
+    
+    const i = Math.floor(Math.log(nanoseconds / Math.log(k)))
+    
+    return `${parseFloat((nanoseconds / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
