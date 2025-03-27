@@ -11,10 +11,12 @@ env:
   
 jobs:
   ensure-invoked:
-    permissions: write-all
+    permissions: 
+      pull-requests: write
     runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/benchmark')}}
     steps:
-      - name: Acknowledge Benchmark Request
+      - name: 💬 Acknowledge Benchmark Request
         uses: actions/github-script@v7
         with:
           github-token: ${{ github.token }}
@@ -26,20 +28,21 @@ jobs:
               body: '[Running Benchmark](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
             })
         
-      - name: Checkout
+      - name: 🛒 Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
         
-      - name: Setup dotnet ${{ matrix.dotnet-version }}
+      - name: ⚙️ Setup dotnet ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
         
-      - name: Run Benchmark
+      - name: 📈 Run Benchmark
         run: cd Benchmarks/AnimalTrack.Repository.Benchmarks && dotnet run -c Release --exporters json
         
-      - uses: actions/github-script@v7
+      - name: 💬 Comment Results
+        uses: actions/github-script@v7
         with:
           github-token: ${{ github.token }}
           script: |
