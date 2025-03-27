@@ -56,7 +56,7 @@ function formatBytes(bytesString) {
 
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))}${sizes[i]}`
 }
 
 function formatTime(nanosecondsString) {
@@ -67,7 +67,7 @@ function formatTime(nanosecondsString) {
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['ns', 'us', 'ms', 's'];
     
-    const i = Math.floor(Math.log(nanoseconds / Math.log(k)))
+    const i = Math.floor(Math.log(nanoseconds) / Math.log(k))
     
     return `${parseFloat((nanoseconds / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
