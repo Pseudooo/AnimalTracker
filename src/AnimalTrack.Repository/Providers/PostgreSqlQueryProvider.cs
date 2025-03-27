@@ -19,6 +19,9 @@ public class PostgreSqlQueryProvider : IPostgreSqlQueryProvider
 
     private static readonly Lazy<Task<string>> GetAnimalUpdateQuery = new(
         async () => await File.ReadAllTextAsync($"{QueryDirectoryPathLazy.Value}/update_animal.sql"));
+
+    private static readonly Lazy<Task<string>> GetAnimalNotesQueryLazy = new(
+        async () => await File.ReadAllTextAsync($"{QueryDirectoryPathLazy.Value}/get_animal_notes.sql"));
     
     public async Task<string> GetInsertAnimalSqlText() => await InsertAnimalQueryLazy.Value;
     
@@ -27,4 +30,6 @@ public class PostgreSqlQueryProvider : IPostgreSqlQueryProvider
     public async Task<string> GetAnimalPageSqlText() => await GetAnimalPageQuery.Value;
     
     public async Task<string> GetUpdateAnimalSqlText() => await GetAnimalUpdateQuery.Value;
+    
+    public async Task<string> GetAnimalNotesSqlText() => await GetAnimalNotesQueryLazy.Value;
 }
