@@ -1,4 +1,5 @@
 using AnimalTrack.ClientModels;
+using AnimalTrack.ClientModels.Models.Animals;
 using AnimalTrack.Services.Requests.Commands;
 using AnimalTrack.Services.Requests.Queries;
 using Asp.Versioning;
@@ -28,6 +29,16 @@ public class AnimalController(IMediator mediator) : ControllerBase
         if(result is null)
             return NotFound();
         
+        return result;
+    }
+
+    [HttpGet("{animalId}/notes", Name = nameof(GetAnimalNotes))]
+    public async Task<ActionResult<List<AnimalNoteModel>>> GetAnimalNotes(
+        int animalId,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetAnimalNotesQuery(animalId);
+        var result = await mediator.Send(query, cancellationToken);
         return result;
     }
 
