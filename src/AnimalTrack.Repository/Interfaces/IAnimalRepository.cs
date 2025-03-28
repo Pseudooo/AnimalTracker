@@ -5,6 +5,10 @@ namespace AnimalTrack.Repository.Interfaces;
 public interface IAnimalRepository
 {
     public Task<AnimalEntity> InsertAnimal(string name, CancellationToken cancellationToken = default);
+    public Task<AnimalNoteEntity> InsertAnimalNote(
+        int animalId,
+        string note,
+        CancellationToken cancellationToken = default);
     Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default);
 
     Task<List<AnimalNoteEntity>> GetAnimalNotes(

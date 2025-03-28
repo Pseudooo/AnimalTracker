@@ -37,6 +37,37 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return animalEntity;
     }
 
+    public async Task<AnimalNoteEntity> InsertAnimalNote(int animalId, string note, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(note, nameof(note));
+
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@AnimalId", animalId },
+            { "@Note", note },
+        };
+        var query = await provider.GetInsertAnimalNoteSqlText();
+        List<string> returnedColumns =
+        [
+            "Id", "CreatedAt"
+        ];
+        
+        var insertedRows = await sqlClient.RunReturningInsert(
+            query,
+            parameters,
+            returnedColumns,
+            cancellationToken);
+        var insertedRow = insertedRows.Single();
+        
+        return new AnimalNoteEntity()
+        {
+            Id = insertedRow["Id"] as int? ?? throw new InvalidDataException(nameof(insertedRow)),
+            AnimalId = animalId,
+            Note = note,
+            CreatedAt = insertedRow["CreatedAt"] as DateTime? ?? throw new InvalidDataException(nameof(insertedRow)),
+        };
+    }
+
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object>()

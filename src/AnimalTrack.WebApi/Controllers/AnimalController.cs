@@ -21,6 +21,17 @@ public class AnimalController(IMediator mediator) : ControllerBase
         return result;
     }
 
+    [HttpPost("{animalId}/notes", Name = nameof(CreateAnimalNote))]
+    public async Task<ActionResult<AnimalNoteModel>> CreateAnimalNote(
+        int animalId,
+        [FromBody] string note,
+        CancellationToken cancellationToken)
+    {
+        var command = new CreateAnimalNoteCommand(animalId, note);
+        var result = await mediator.Send(command, cancellationToken);
+        return result;
+    }
+
     [HttpGet("{id}", Name = nameof(GetAnimalById))]
     public async Task<ActionResult<AnimalModel>> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
