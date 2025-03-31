@@ -99,9 +99,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: branch-benchmark-results
-          
-      - name: DEBUG
-        run: ls
             
       - name: 💬 Comment Comparison
         uses: actions/github-script@v7
