@@ -4,13 +4,12 @@ on:
     types: [created]
 
 env:
-  DOTNET_VERSION: 8.x.x
-  
+  DOTNET_VERSION: 8.x.x  
+
 jobs:
-  ensure-invoked:
-    permissions: 
+  comment-pr:
+    permissions:
       pull-requests: write
-      contents: read
     runs-on: ubuntu-latest
     if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/benchmark')}}
     steps:
@@ -18,32 +17,90 @@ jobs:
         uses: actions/github-script@v7
         with:
           github-token: ${{ github.token }}
-          script: |       
+          script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '[Running Benchmark](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})'
             })
-        
+  
+  benchmark-master:
+    runs-on: ubuntu-latest
+    needs: comment-pr
+    steps:
       - name: 🛒 Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-        
+          
       - name: ⚙️ Setup dotnet ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: 📈 Run Benchmark
+        run: cd Benchmarks/AnimalTrack.Repository.Benchmarks && dotnet run -c Release --exporters json
+
+      - name: 🚚 Move Results File
+        run: mv './Benchmarks/AnimalTrack.Repository.Benchmarks/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json' ./master-benchmark-results.json
         
+      - name: ⬆️ Upload Result Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-benchmark-results
+          path: ./master-benchmark-results.json
+          
+  benchmark-branch:
+    runs-on: ubuntu-latest
+    needs: comment-pr
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: ⚙️ Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
       - name: 📈 Run Benchmark
         run: cd Benchmarks/AnimalTrack.Repository.Benchmarks && dotnet run -c Release --exporters json
         
-      - name: 💬 Comment Results
+      - name: 🚚 Move Results File
+        run: mv './Benchmarks/AnimalTrack.Repository.Benchmarks/BenchmarkDotNet.Artifacts/results/AnimalTrack.Repository.Benchmarks.ReadAnimalsBenchmark-report.json' ./branch-benchmark-results.json
+
+      - name: ⬆️ Upload Result Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-benchmark-results
+          path: ./branch-benchmark-results.json
+          
+  comment-comparison:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    needs:
+      - benchmark-master
+      - benchmark-branch
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v4
+      
+      - name: ⬇️ Download Master Results Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: master-benchmark-results
+          
+      - name: ⬇️ Download Branch Results Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: branch-benchmark-results
+            
+      - name: 💬 Comment Comparison
         uses: actions/github-script@v7
         with:
           github-token: ${{ github.token }}
           script: |
-            const script = require('./.github/scripts/commentBenchmarkResults.js');
-            script({github, context});
-            
+            const compare = require('./.github/scripts/compareBenchmarks.js');
+            compare({github, context});
