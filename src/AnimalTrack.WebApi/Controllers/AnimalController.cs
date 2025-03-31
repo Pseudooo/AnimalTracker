@@ -1,4 +1,5 @@
 using AnimalTrack.ClientModels;
+using AnimalTrack.ClientModels.Models.Animals;
 using AnimalTrack.Services.Requests.Commands;
 using AnimalTrack.Services.Requests.Queries;
 using Asp.Versioning;
@@ -20,6 +21,20 @@ public class AnimalController(IMediator mediator) : ControllerBase
         return result;
     }
 
+    [HttpPost("{animalId}/notes", Name = nameof(CreateAnimalNote))]
+    public async Task<ActionResult<AnimalNoteModel>> CreateAnimalNote(
+        int animalId,
+        [FromBody] string note,
+        CancellationToken cancellationToken)
+    {
+        if(string.IsNullOrWhiteSpace(note))
+            return BadRequest();
+        
+        var command = new CreateAnimalNoteCommand(animalId, note);
+        var result = await mediator.Send(command, cancellationToken);
+        return result;
+    }
+
     [HttpGet("{id}", Name = nameof(GetAnimalById))]
     public async Task<ActionResult<AnimalModel>> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
@@ -28,6 +43,16 @@ public class AnimalController(IMediator mediator) : ControllerBase
         if(result is null)
             return NotFound();
         
+        return result;
+    }
+
+    [HttpGet("{animalId}/notes", Name = nameof(GetAnimalNotes))]
+    public async Task<ActionResult<List<AnimalNoteModel>>> GetAnimalNotes(
+        int animalId,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetAnimalNotesQuery(animalId);
+        var result = await mediator.Send(query, cancellationToken);
         return result;
     }
 
@@ -58,5 +83,16 @@ public class AnimalController(IMediator mediator) : ControllerBase
         {
             return NotFound();
         }
+    }
+
+    [HttpDelete("note/{id}", Name = nameof(DeleteAnimalNote))]
+    public async Task<IActionResult> DeleteAnimalNote(int id, CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteAnimalNoteCommand(id);
+        var success = await mediator.Send(command, cancellationToken);
+        if(!success)
+            return NotFound();
+
+        return NoContent();
     }
  }

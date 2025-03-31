@@ -37,6 +37,37 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return animalEntity;
     }
 
+    public async Task<AnimalNoteEntity> InsertAnimalNote(int animalId, string note, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(note, nameof(note));
+
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@AnimalId", animalId },
+            { "@Note", note },
+        };
+        var query = await provider.GetInsertAnimalNoteSqlText();
+        List<string> returnedColumns =
+        [
+            "Id", "CreatedAt"
+        ];
+        
+        var insertedRows = await sqlClient.RunReturningInsert(
+            query,
+            parameters,
+            returnedColumns,
+            cancellationToken);
+        var insertedRow = insertedRows.Single();
+        
+        return new AnimalNoteEntity()
+        {
+            Id = insertedRow["Id"] as int? ?? throw new InvalidDataException(nameof(insertedRow)),
+            AnimalId = animalId,
+            Note = note,
+            CreatedAt = insertedRow["CreatedAt"] as DateTime? ?? throw new InvalidDataException(nameof(insertedRow)),
+        };
+    }
+
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object>()
@@ -59,6 +90,29 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
             return null;
         
         return MapAnimalEntityFromDictionary(result);
+    }
+
+    public async Task<List<AnimalNoteEntity>> GetAnimalNotes(
+        int animalId,
+        CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@AnimalId", animalId },
+        };
+        var query = await provider.GetAnimalNotesSqlText();
+        List<string> returnedColumns =
+        [
+            "Id", "Note", "CreatedAt",
+        ];
+        
+        var results = await sqlClient.RunQuery(
+            query,
+            parameters,
+            returnedColumns,
+            cancellationToken);
+
+        return MapAnimalNoteEntitiesFromDictionaries(results);
     }
 
     public async Task<List<AnimalEntity>> GetAnimalPage(
@@ -98,12 +152,27 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         };
         var query = await provider.GetUpdateAnimalSqlText();
 
-        var updated = await sqlClient.RunUpdate(
+        var updated = await sqlClient.RunNonQuery(
             query,
             parameters,
             cancellationToken);
         
         return updated == 1;
+    }
+
+    public async Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@Id", noteId }
+        };
+        var query = await provider.DeleteAnimalNoteSqlText();
+        
+        var deleted = await sqlClient.RunNonQuery(
+            query,
+            parameters,
+            cancellationToken);
+        return deleted == 1;
     }
 
     private List<AnimalEntity> MapAnimalEntitiesFromDictionaries(
@@ -126,6 +195,28 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         {
             Id = id,
             Name = name,
+            CreatedAt = createdAt,
+        };
+    }
+    
+    private List<AnimalNoteEntity> MapAnimalNoteEntitiesFromDictionaries(
+        IReadOnlyCollection<IReadOnlyDictionary<string, object>> animalNoteEntityDictionaries)
+        => animalNoteEntityDictionaries.Select(MapAnimalNoteEntityFromDictionary)
+            .ToList();
+
+    private AnimalNoteEntity MapAnimalNoteEntityFromDictionary(IReadOnlyDictionary<string, object> columnValues)
+    {
+        if(!columnValues.TryGetValue("Id", out var idValue) || idValue is not int id)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalNoteEntity)}.{nameof(AnimalNoteEntity.Id)}");
+        if(!columnValues.TryGetValue("Note", out var noteValue) || noteValue is not string note)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalNoteEntity)}.{nameof(AnimalNoteEntity.Note)}");
+        if(!columnValues.TryGetValue("CreatedAt", out var createdAtValue) || createdAtValue is not DateTime createdAt)
+            throw new InvalidDataException($"Unexpected value for {nameof(AnimalNoteEntity)}.{nameof(AnimalNoteEntity.CreatedAt)}");
+
+        return new AnimalNoteEntity()
+        {
+            Id = id,
+            Note = note,
             CreatedAt = createdAt,
         };
     }

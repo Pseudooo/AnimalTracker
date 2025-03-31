@@ -5,7 +5,7 @@ using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
 using Xunit;
 
-namespace AnimalTrack.WebApi.Tests;
+namespace AnimalTrack.WebApi.Tests.Animals;
 
 public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<AnimalTrackFixture>
 {
@@ -45,7 +45,7 @@ public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<
     }
 
     [Fact]
-    public async Task GivenAllAnimalsKnown_WhenGetPage_ShouldReturn200()
+    public async Task GivenAnimalsKnown_WhenGetPage_ShouldReturn200()
     {
         // Arrange
         var uri = new Uri("Animal", UriKind.Relative);
