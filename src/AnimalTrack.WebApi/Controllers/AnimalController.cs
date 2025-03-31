@@ -27,6 +27,9 @@ public class AnimalController(IMediator mediator) : ControllerBase
         [FromBody] string note,
         CancellationToken cancellationToken)
     {
+        if(string.IsNullOrWhiteSpace(note))
+            return BadRequest();
+        
         var command = new CreateAnimalNoteCommand(animalId, note);
         var result = await mediator.Send(command, cancellationToken);
         return result;
