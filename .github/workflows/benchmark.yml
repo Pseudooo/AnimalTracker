@@ -58,12 +58,8 @@ jobs:
           
       - name: Checkout Pull Request
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_URL="${{ github.event.issue.pull_request.url }}"
-          PR_NUM=${PR_URL##*/}
-          echo "Checking out from PR #$PR_NUM based on URL: $PR_URL"
-          hub pr checkout $PR_NUM
+          GITHUB_TOKEN: ${{ github.token }}
+        run: gh pr checkout ${{ github.event.issue.number }} 
 
       - name: ⚙️ Setup dotnet ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
