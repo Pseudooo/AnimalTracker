@@ -13,6 +13,8 @@ public interface IPostgreSqlClient
         string queryText,
         object? parameters,
         CancellationToken cancellationToken = default);
+
+    Task<T?> UpdateSingle<T>(string query, object? parameters, CancellationToken cancellationToken = default);
     
     Task<int> RunNonQuery(
         string query,

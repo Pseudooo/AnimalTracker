@@ -43,6 +43,19 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         return results.ToList();
     }
 
+    public async Task<T?> UpdateSingle<T>(
+        string query,
+        object? parameters,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query, nameof(query));
+        
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleOrDefaultAsync(commandDefinition);
+    }
+
     public async Task<int> RunNonQuery(
         string query,
         IReadOnlyDictionary<string, object> parameters,
@@ -75,21 +88,5 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         foreach(var (key, value) in parameters) 
             command.Parameters.AddWithValue(key, value);
         return command;
-    }
-
-    private static async Task<List<Dictionary<string, object>>> IterateReader(
-        NpgsqlDataReader reader,
-        IReadOnlyCollection<string> columns,
-        CancellationToken cancellationToken = default)
-    {
-        var returnedRows = new List<Dictionary<string, object>>();
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            var record = new Dictionary<string, object>();
-            foreach (var column in columns)
-                record[column] = reader[column];
-            returnedRows.Add(record);
-        }
-        return returnedRows;
     }
 }
