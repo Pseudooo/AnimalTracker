@@ -53,7 +53,7 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         await using var connection = await GetOpenConnection(cancellationToken);
         
         var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
-        return await connection.QuerySingleOrDefaultAsync(commandDefinition);
+        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
     public async Task<int> RunNonQuery(

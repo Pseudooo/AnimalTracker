@@ -73,6 +73,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         var parameters = new
         {
             Id = animalId,
+            Name = name,
         };
         var updatedAnimal = await sqlClient.UpdateSingle<AnimalEntity>(query, parameters, cancellationToken);
         

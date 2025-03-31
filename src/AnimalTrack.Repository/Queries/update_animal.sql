@@ -1,5 +1,5 @@
 update animals
     set
-        Name = @name
+        Name = @Name
         where Id = @Id
     returning Id, Name, CreatedAt
