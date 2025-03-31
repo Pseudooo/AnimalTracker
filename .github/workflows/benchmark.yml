@@ -55,8 +55,6 @@ jobs:
     steps:
       - name: 🛒 Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.issue.number }}
           
       - name: Checkout Pull Request
         env:
