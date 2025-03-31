@@ -89,13 +89,13 @@ public class AnimalNotesTests(AnimalTrackFixture animalTrackFixture) : IClassFix
     public async Task GivenKnownNote_WhenDelete_ShouldReturn200()
     {
         // Arrange
-        var uri = new Uri("Animal/note/99", UriKind.Relative);
+        var uri = new Uri("Animal/note/3", UriKind.Relative);
         
         // Act
         var response = await _httpClient.DeleteAsync(uri);
         
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
     }
 
     [Fact]
