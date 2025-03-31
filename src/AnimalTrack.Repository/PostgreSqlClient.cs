@@ -1,4 +1,5 @@
 using AnimalTrack.Repository.Interfaces;
+using Dapper;
 using Npgsql;
 
 namespace AnimalTrack.Repository;
@@ -6,6 +7,33 @@ namespace AnimalTrack.Repository;
 public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
+    public async Task<T?> RunSingleResultQuery<T>(
+        string queryText,
+        object? parameters,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(queryText, nameof(queryText));
+        
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
+    }
+
+    public async Task<List<T>> RunMultiResultQuery<T>(
+        string queryText,
+        object? parameters,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(queryText, nameof(queryText));
+        
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        var results = await connection.QueryAsync<T>(commandDefinition);
+        return results.ToList();
+    }
+    
     public async Task<List<Dictionary<string, object>>> RunReturningInsert(
         string query,
         IReadOnlyDictionary<string, object> parameters,
