@@ -10,62 +10,27 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var parameters = new Dictionary<string, object>()
-        {
-            { "@Name", name }
-        };
         var query = await provider.GetInsertAnimalSqlText();
-        List<string> returnedColumns =
-        [
-            "Id", "CreatedAt"
-        ];
-        
-        var insertedRows = await sqlClient.RunReturningInsert(
-            query,
-            parameters,
-            returnedColumns,
-            cancellationToken);
-        var insertedRow = insertedRows.Single();
-
-        var animalEntity = new AnimalEntity()
+        var parameters = new
         {
-            Id = insertedRow["Id"] as int? ?? throw new InvalidDataException(nameof(insertedRow)),
             Name = name,
-            CreatedAt = insertedRow["CreatedAt"] as DateTime? ?? throw new InvalidDataException(nameof(insertedRow)),
         };
-
-        return animalEntity;
+        var result = await sqlClient.InsertSingle<AnimalEntity>(query, parameters, cancellationToken);
+        return result;
     }
 
     public async Task<AnimalNoteEntity> InsertAnimalNote(int animalId, string note, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(note, nameof(note));
-
-        var parameters = new Dictionary<string, object>()
-        {
-            { "@AnimalId", animalId },
-            { "@Note", note },
-        };
+        
         var query = await provider.GetInsertAnimalNoteSqlText();
-        List<string> returnedColumns =
-        [
-            "Id", "CreatedAt"
-        ];
-        
-        var insertedRows = await sqlClient.RunReturningInsert(
-            query,
-            parameters,
-            returnedColumns,
-            cancellationToken);
-        var insertedRow = insertedRows.Single();
-        
-        return new AnimalNoteEntity()
+        var parameters = new
         {
-            Id = insertedRow["Id"] as int? ?? throw new InvalidDataException(nameof(insertedRow)),
             AnimalId = animalId,
             Note = note,
-            CreatedAt = insertedRow["CreatedAt"] as DateTime? ?? throw new InvalidDataException(nameof(insertedRow)),
         };
+        var result = await sqlClient.InsertSingle<AnimalNoteEntity>(query, parameters, cancellationToken);
+        return result;
     }
 
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
