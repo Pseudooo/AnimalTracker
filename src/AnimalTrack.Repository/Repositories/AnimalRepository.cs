@@ -152,7 +152,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         };
         var query = await provider.GetUpdateAnimalSqlText();
 
-        var updated = await sqlClient.RunUpdate(
+        var updated = await sqlClient.RunNonQuery(
             query,
             parameters,
             cancellationToken);
@@ -168,7 +168,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         };
         var query = await provider.DeleteAnimalNoteSqlText();
         
-        var deleted = await sqlClient.RunUpdate(
+        var deleted = await sqlClient.RunNonQuery(
             query,
             parameters,
             cancellationToken);

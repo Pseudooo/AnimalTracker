@@ -40,7 +40,7 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         return await IterateReader(reader, returnedColumns, cancellationToken);
     }
 
-    public async Task<int> RunUpdate(
+    public async Task<int> RunNonQuery(
         string query,
         IReadOnlyDictionary<string, object> parameters,
         CancellationToken cancellationToken = default)

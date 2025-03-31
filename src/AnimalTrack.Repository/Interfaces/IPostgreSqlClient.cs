@@ -14,7 +14,7 @@ public interface IPostgreSqlClient
         IReadOnlyCollection<string> returnedColumns,
         CancellationToken cancellationToken = default);
     
-    Task<int> RunUpdate(
+    Task<int> RunNonQuery(
         string query,
         IReadOnlyDictionary<string, object> parameters,
         CancellationToken cancellationToken = default);
