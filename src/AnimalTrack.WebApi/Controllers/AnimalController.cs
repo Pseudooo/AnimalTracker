@@ -84,4 +84,15 @@ public class AnimalController(IMediator mediator) : ControllerBase
             return NotFound();
         }
     }
+
+    [HttpDelete("note/{id}", Name = nameof(DeleteAnimalNote))]
+    public async Task<IActionResult> DeleteAnimalNote(int id, CancellationToken cancellationToken = default)
+    {
+        var command = new DeleteAnimalNoteCommand(id);
+        var success = await mediator.Send(command, cancellationToken);
+        if(!success)
+            return NotFound();
+
+        return NoContent();
+    }
  }

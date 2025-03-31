@@ -160,6 +160,21 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return updated == 1;
     }
 
+    public async Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object>()
+        {
+            { "@Id", noteId }
+        };
+        var query = await provider.DeleteAnimalNoteSqlText();
+        
+        var deleted = await sqlClient.RunUpdate(
+            query,
+            parameters,
+            cancellationToken);
+        return deleted == 1;
+    }
+
     private List<AnimalEntity> MapAnimalEntitiesFromDictionaries(
         IReadOnlyCollection<IReadOnlyDictionary<string, object>> animalEntities)
     {

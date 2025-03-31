@@ -8,4 +8,5 @@ public interface IPostgreSqlQueryProvider
     Task<string> GetUpdateAnimalSqlText();
     Task<string> GetInsertAnimalNoteSqlText();
     Task<string> GetAnimalNotesSqlText();
+    Task<string> DeleteAnimalNoteSqlText();
 }
