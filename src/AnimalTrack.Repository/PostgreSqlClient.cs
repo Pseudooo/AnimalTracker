@@ -51,23 +51,6 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         return await IterateReader(reader, returnedColumns, cancellationToken);
     }
 
-    public async Task<List<Dictionary<string, object>>> RunQuery(
-        string query,
-        IReadOnlyDictionary<string, object> parameters,
-        IReadOnlyCollection<string> returnedColumns,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
-        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
-        ArgumentNullException.ThrowIfNull(returnedColumns, nameof(returnedColumns));
-        
-        await using var connection = await GetOpenConnection(cancellationToken);
-        await using var command = CreateCommand(connection, query, parameters);
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-        
-        return await IterateReader(reader, returnedColumns, cancellationToken);
-    }
-
     public async Task<int> RunNonQuery(
         string query,
         IReadOnlyDictionary<string, object> parameters,
