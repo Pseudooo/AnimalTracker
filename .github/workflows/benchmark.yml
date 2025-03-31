@@ -53,6 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: comment-pr
     steps:
+      - name: DEBUG
+        run: echo ${{ github.event.pull_request.head.ref }}
+        
       - name: 🛒 Checkout
         uses: actions/checkout@v4
         with:
