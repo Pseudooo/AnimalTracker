@@ -10,6 +10,28 @@ namespace AnimalTrack.WebApi.Tests.Animals;
 public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<AnimalTrackFixture>
 {
     private readonly HttpClient _httpClient = animalTrackFixture.CreateClient();
+
+    [Fact]
+    public async Task GivenNewAnimal_WhenCreate_ShouldReturnAnimal()
+    {
+        // Arrange
+        var uri = new Uri("Animal", UriKind.Relative);
+        const string name = "James";
+        var request = new HttpRequestMessage(HttpMethod.Post, uri)
+        {
+            Content = JsonContent.Create(name),
+        };
+        
+        // Act
+        var result = await _httpClient.SendAsync(request);
+        result.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var animalModel = await result.Content.ReadFromJsonAsync<AnimalModel>();
+        
+        animalModel.ShouldNotBeNull();
+        animalModel.Id.ShouldNotBe(0);
+        animalModel.Name.ShouldBe(name);
+        animalModel.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+    }
     
     [Fact]
     public async Task GivenUnknownAnimalId_WhenGet_ShouldReturn404()
