@@ -56,7 +56,7 @@ jobs:
       - name: 🛒 Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.issue.pull_request.head.ref }}
 
       - name: ⚙️ Setup dotnet ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
