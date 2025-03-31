@@ -15,7 +15,7 @@ public class AnimalNotesTests(AnimalTrackFixture animalTrackFixture) : IClassFix
     public async Task GivenKnownAnimal_WhenCreateNote_ShouldReturn200()
     {
         // Arrange
-        var uri = new Uri("Animal/1/notes", UriKind.Relative);
+        var uri = new Uri("Animal/2/notes", UriKind.Relative);
         
         // Act
         var response = await _httpClient.PostAsync(uri, JsonContent.Create("This is a cool note"));
@@ -31,7 +31,7 @@ public class AnimalNotesTests(AnimalTrackFixture animalTrackFixture) : IClassFix
     public async Task GivenKnownAnimal_WhenCreateEmptyNote_ShouldReturn400(string? note)
     {
         // Arrange
-        var uri = new Uri("Animal/1/notes", UriKind.Relative);
+        var uri = new Uri("Animal/3/notes", UriKind.Relative);
         
         // Act
         var response = await _httpClient.PostAsync(uri, JsonContent.Create(note));

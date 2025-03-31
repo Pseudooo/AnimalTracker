@@ -98,7 +98,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         var parameters = new Dictionary<string, object>()
         {
-            { "@Id", animalId },
+            { "@AnimalId", animalId },
         };
         var query = await provider.GetAnimalNotesSqlText();
         List<string> returnedColumns =
