@@ -54,7 +54,7 @@ jobs:
     needs: comment-pr
     steps:
       - name: DEBUG
-        run: echo ${{ github.event.pull_request.head.ref }}
+        run: echo ${{ github.event.issue.pull_request.head.ref }}
         
       - name: 🛒 Checkout
         uses: actions/checkout@v4
