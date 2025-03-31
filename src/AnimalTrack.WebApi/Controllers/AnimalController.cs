@@ -14,7 +14,9 @@ namespace AnimalTrack.WebApi.Controllers;
 public class AnimalController(IMediator mediator) : ControllerBase
 {
     [HttpPost("", Name = nameof(CreateAnimal))]
-    public async Task<ActionResult<AnimalModel>> CreateAnimal(string name, CancellationToken cancellationToken)
+    public async Task<ActionResult<AnimalModel>> CreateAnimal(
+        [FromBody] string name,
+        CancellationToken cancellationToken)
     {
         var command = new CreateAnimalCommand(name);
         var result = await mediator.Send(command, cancellationToken);

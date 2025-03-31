@@ -1,4 +1,5 @@
 using AnimalTrack.Repository.Interfaces;
+using Dapper;
 using Npgsql;
 
 namespace AnimalTrack.Repository;
@@ -6,38 +7,53 @@ namespace AnimalTrack.Repository;
 public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
-    public async Task<List<Dictionary<string, object>>> RunReturningInsert(
-        string query,
-        IReadOnlyDictionary<string, object> parameters,
-        IReadOnlyCollection<string> returnedColumns,
-        CancellationToken cancellationToken = default)
+    public async Task<T> InsertSingle<T>(string query, object? parameters, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(query, nameof(query));
-        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
-        ArgumentNullException.ThrowIfNull(returnedColumns, nameof(returnedColumns));
+
+        await using var connection = await GetOpenConnection(cancellationToken);
+        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleAsync<T>(commandDefinition);
+    }
+    
+    public async Task<T?> RunSingleResultQuery<T>(
+        string queryText,
+        object? parameters,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(queryText, nameof(queryText));
         
         await using var connection = await GetOpenConnection(cancellationToken);
-        await using var command = CreateCommand(connection, query, parameters);
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-
-        return await IterateReader(reader, returnedColumns, cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
-    public async Task<List<Dictionary<string, object>>> RunQuery(
+    public async Task<List<T>> RunMultiResultQuery<T>(
+        string queryText,
+        object? parameters,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(queryText, nameof(queryText));
+        
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        var results = await connection.QueryAsync<T>(commandDefinition);
+        return results.ToList();
+    }
+
+    public async Task<T?> UpdateSingle<T>(
         string query,
-        IReadOnlyDictionary<string, object> parameters,
-        IReadOnlyCollection<string> returnedColumns,
+        object? parameters,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(query, nameof(query));
-        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
-        ArgumentNullException.ThrowIfNull(returnedColumns, nameof(returnedColumns));
         
         await using var connection = await GetOpenConnection(cancellationToken);
-        await using var command = CreateCommand(connection, query, parameters);
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         
-        return await IterateReader(reader, returnedColumns, cancellationToken);
+        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
     public async Task<int> RunNonQuery(
@@ -72,21 +88,5 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         foreach(var (key, value) in parameters) 
             command.Parameters.AddWithValue(key, value);
         return command;
-    }
-
-    private static async Task<List<Dictionary<string, object>>> IterateReader(
-        NpgsqlDataReader reader,
-        IReadOnlyCollection<string> columns,
-        CancellationToken cancellationToken = default)
-    {
-        var returnedRows = new List<Dictionary<string, object>>();
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            var record = new Dictionary<string, object>();
-            foreach (var column in columns)
-                record[column] = reader[column];
-            returnedRows.Add(record);
-        }
-        return returnedRows;
     }
 }
