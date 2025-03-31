@@ -1,3 +1,3 @@
 insert into AnimalNotes (AnimalId, Note)
     values (@AnimalId, @Note)
-    returning Id, CreatedAt;
+    returning Id, AnimalId, Note, CreatedAt;

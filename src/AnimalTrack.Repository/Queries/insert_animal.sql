@@ -1,3 +1,3 @@
 insert into animals (Name) 
     values (@Name)
-    returning Id, CreatedAt;
+    returning Id, Name, CreatedAt;

@@ -7,6 +7,15 @@ namespace AnimalTrack.Repository;
 public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
+    public async Task<T> InsertSingle<T>(string query, object? parameters, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query, nameof(query));
+
+        await using var connection = await GetOpenConnection(cancellationToken);
+        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleAsync<T>(commandDefinition);
+    }
+    
     public async Task<T?> RunSingleResultQuery<T>(
         string queryText,
         object? parameters,
@@ -32,23 +41,6 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
         var results = await connection.QueryAsync<T>(commandDefinition);
         return results.ToList();
-    }
-    
-    public async Task<List<Dictionary<string, object>>> RunReturningInsert(
-        string query,
-        IReadOnlyDictionary<string, object> parameters,
-        IReadOnlyCollection<string> returnedColumns,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
-        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
-        ArgumentNullException.ThrowIfNull(returnedColumns, nameof(returnedColumns));
-        
-        await using var connection = await GetOpenConnection(cancellationToken);
-        await using var command = CreateCommand(connection, query, parameters);
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-
-        return await IterateReader(reader, returnedColumns, cancellationToken);
     }
 
     public async Task<int> RunNonQuery(
