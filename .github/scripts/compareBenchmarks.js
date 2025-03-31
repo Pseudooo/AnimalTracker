@@ -4,15 +4,15 @@ module.exports = ({github, context}) => {
     const masterResults = loadBenchmarkResults('./master-benchmark-results.json');
     const branchResults = loadBenchmarkResults('./branch-benchmark-results.json');
     
-    let commentContent = '| Benchmark | Mean | Diff | Allocations | Diff |\n'
-    commentContent += '|---|---|---|---|---|\n'
+    let commentContent = '| Benchmark | Mean | Allocations |\n'
+    commentContent += '|---|---|---|\n'
     
     for(const branchResult of branchResults) {
         const masterResult = masterResults.filter(res => res.name == branchResult.name)[0];
         
-        const timingsDiff = percentageDifference(branchResult.mean, masterResult.mean);
-        const allocationsDiff = percentageDifference(branchResult.allocated, masterResult.allocated);
-        commentContent += `| ${branchResult.name} | ${formatTime(branchResult.mean)} | ${timingsDiff < 0 ? '' : '+'}${round(timingsDiff, 2)}% | ${formatBytes(branchResult.allocated)} | ${allocationsDiff < 0 ? '' : '+'}${round(allocationsDiff, 2)}% |\n`
+        const timingsDiff = round(percentageDifference(branchResult.mean, masterResult.mean), 2);
+        const allocationsDiff = round(percentageDifference(branchResult.allocated, masterResult.allocated), 2);
+        commentContent += `| ${branchResult.name} | ${formatTime(branchResult.mean)} (${timingsDiff < 0 ? '' : '+'}${timingsDiff}%) | ${formatBytes(branchResult.allocated)} (${allocationsDiff < 0 ? '' : '+'}${allocationsDiff}%) |\n`
     }
     
     github.rest.issues.createComment({
