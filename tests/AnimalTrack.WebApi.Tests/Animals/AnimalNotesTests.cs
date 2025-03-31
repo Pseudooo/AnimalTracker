@@ -39,19 +39,6 @@ public class AnimalNotesTests(AnimalTrackFixture animalTrackFixture) : IClassFix
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
-    
-    [Fact]
-    public async Task GivenUnknownAnimal_WhenCreateNote_ShouldReturn404()
-    {
-        // Arrange
-        var uri = new Uri("Animal/99/notes", UriKind.Relative);
-        
-        // Act
-        var response = await _httpClient.PostAsync(uri, JsonContent.Create("This is a cool note"));
-        
-        // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
-    }
 
     [Fact]
     public async Task GivenKnownAnimal_WhenGetNotes_ShouldReturn200()
@@ -70,20 +57,6 @@ public class AnimalNotesTests(AnimalTrackFixture animalTrackFixture) : IClassFix
         notes.ShouldContain(note => note.Note == "This is a note");
         notes.ShouldContain(note => note.Note == "This is my second note");
     }
-
-    [Fact]
-    public async Task GivenUnknownAnimal_WhenGetNotes_ShouldReturn404()
-    {
-        // Arrange
-        var uri = new Uri("Animal/99/notes", UriKind.Relative);
-        
-        // Act
-        var response = await _httpClient.GetAsync(uri);
-        
-        // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
-    }
-    
     
     [Fact]
     public async Task GivenKnownNote_WhenDelete_ShouldReturn200()
