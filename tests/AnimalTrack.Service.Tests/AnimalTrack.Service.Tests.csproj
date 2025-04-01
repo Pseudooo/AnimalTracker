@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\AnimalTrack.Services\AnimalTrack.Services.csproj" />
+        <ProjectReference Include="..\..\src\AnimalTrack.Services\AnimalTrack.Services.csproj" />
     </ItemGroup>
 
 </Project>
