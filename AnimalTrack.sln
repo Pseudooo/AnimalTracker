@@ -18,15 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Configuration", "src\AnimalTrack.Configuration\AnimalTrack.Configuration.csproj", "{E6734129-34D9-4924-9D6C-D93845F8E825}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{008731D6-9371-4F9C-A5C8-F822D274D269}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Repository.Benchmarks", "Benchmarks\AnimalTrack.Repository.Benchmarks\AnimalTrack.Repository.Benchmarks.csproj", "{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Fixtures", "tests\AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj", "{343890B0-A364-4D78-A85D-F9036FF716E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Service.Tests", "tests\AnimalTrack.Service.Tests\AnimalTrack.Service.Tests.csproj", "{ACFDFB54-2E2F-48CF-B231-10B07A3103E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.BenchmarkRunner", "benchmarks\AnimalTrack.BenchmarkRunner\AnimalTrack.BenchmarkRunner.csproj", "{F49C93B0-2F96-42AE-B90F-6D683889C264}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{BD04A258-CCF0-4F66-B0BC-1B0CD34112F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +37,8 @@ Global
 		{0B46EC3D-38FE-450C-B8F9-F318A52D9C00} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
 		{BBD0AEAC-2E99-464D-8778-68FC0F4E7A83} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
 		{E6734129-34D9-4924-9D6C-D93845F8E825} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
-		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24} = {008731D6-9371-4F9C-A5C8-F822D274D269}
 		{343890B0-A364-4D78-A85D-F9036FF716E5} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
 		{ACFDFB54-2E2F-48CF-B231-10B07A3103E7} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
-		{F49C93B0-2F96-42AE-B90F-6D683889C264} = {008731D6-9371-4F9C-A5C8-F822D274D269}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0137A1FE-4B49-4869-B9F9-9A5899C73197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -75,10 +69,6 @@ Global
 		{E6734129-34D9-4924-9D6C-D93845F8E825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6734129-34D9-4924-9D6C-D93845F8E825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6734129-34D9-4924-9D6C-D93845F8E825}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24}.Release|Any CPU.Build.0 = Release|Any CPU
 		{343890B0-A364-4D78-A85D-F9036FF716E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{343890B0-A364-4D78-A85D-F9036FF716E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{343890B0-A364-4D78-A85D-F9036FF716E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,9 +77,5 @@ Global
 		{ACFDFB54-2E2F-48CF-B231-10B07A3103E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACFDFB54-2E2F-48CF-B231-10B07A3103E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACFDFB54-2E2F-48CF-B231-10B07A3103E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F49C93B0-2F96-42AE-B90F-6D683889C264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F49C93B0-2F96-42AE-B90F-6D683889C264}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F49C93B0-2F96-42AE-B90F-6D683889C264}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F49C93B0-2F96-42AE-B90F-6D683889C264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
