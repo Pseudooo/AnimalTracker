@@ -1,5 +1,6 @@
 using AnimalTrack.ClientModels;
 using AnimalTrack.ClientModels.Models.Animals;
+using AnimalTrack.Services.Exceptions;
 using AnimalTrack.Services.Requests.Commands;
 using AnimalTrack.Services.Requests.Queries;
 using Asp.Versioning;
@@ -29,12 +30,16 @@ public class AnimalController(IMediator mediator) : ControllerBase
         [FromBody] string note,
         CancellationToken cancellationToken)
     {
-        if(string.IsNullOrWhiteSpace(note))
-            return BadRequest();
-        
-        var command = new CreateAnimalNoteCommand(animalId, note);
-        var result = await mediator.Send(command, cancellationToken);
-        return result;
+        try
+        {
+            var command = new CreateAnimalNoteCommand(animalId, note);
+            var result = await mediator.Send(command, cancellationToken);
+            return result;
+        }
+        catch (RequestValidationException ex)
+        {
+            return BadRequest(ex.Failures);
+        }
     }
 
     [HttpGet("{id}", Name = nameof(GetAnimalById))]

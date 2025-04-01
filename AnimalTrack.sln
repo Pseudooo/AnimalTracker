@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Repository.Benc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.WebApi.Fixtures", "tests\AnimalTrack.WebApi.Fixtures\AnimalTrack.WebApi.Fixtures.csproj", "{343890B0-A364-4D78-A85D-F9036FF716E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalTrack.Service.Tests", "AnimalTrack.Service.Tests\AnimalTrack.Service.Tests.csproj", "{B659E2E3-DEF7-4DDB-924B-44FB989714C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,7 @@ Global
 		{E6734129-34D9-4924-9D6C-D93845F8E825} = {1B482F76-6F24-439D-9DC4-6E8F851B9006}
 		{C1664013-ADBF-4CEC-B5A3-3AF9A134BC24} = {008731D6-9371-4F9C-A5C8-F822D274D269}
 		{343890B0-A364-4D78-A85D-F9036FF716E5} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
+		{B659E2E3-DEF7-4DDB-924B-44FB989714C3} = {31D60F5B-BAF0-4628-8816-9E7301E93E08}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0137A1FE-4B49-4869-B9F9-9A5899C73197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,5 +80,9 @@ Global
 		{343890B0-A364-4D78-A85D-F9036FF716E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{343890B0-A364-4D78-A85D-F9036FF716E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{343890B0-A364-4D78-A85D-F9036FF716E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B659E2E3-DEF7-4DDB-924B-44FB989714C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B659E2E3-DEF7-4DDB-924B-44FB989714C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B659E2E3-DEF7-4DDB-924B-44FB989714C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B659E2E3-DEF7-4DDB-924B-44FB989714C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
