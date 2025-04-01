@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace AnimalTrack.Services.Validators;
 
-public class CreateAnimalCommandValidator : AbstractValidator<CreateAnimalCommand>
+public class UpdateAnimalCommandValidator : AbstractValidator<UpdateAnimalCommand>
 {
-    public CreateAnimalCommandValidator()
+    public UpdateAnimalCommandValidator()
     {
         RuleFor(x => x)
             .SetValidator(new AnimalBodyValidator());
