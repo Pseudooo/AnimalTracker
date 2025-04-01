@@ -41,7 +41,7 @@ jobs:
         run: cd benchmarks/AnimalTrack.BenchmarkRunner && dotnet run -c Release --exporters json
 
       - name: 🚚 Move Results File
-        run: mv './benchmarks/AnimalTrack.BenchmarkRunner/BenchmarkDotNet.Artifacts/results/BenchmarkRun-joined-$(date+'%Y-%m-%d)-report.json' ./master-benchmark-results.json --filter *
+        run: mv './benchmarks/AnimalTrack.BenchmarkRunner/BenchmarkDotNet.Artifacts/results/BenchmarkRun-joined-$(date+'%Y-%m-%d')-report.json' ./master-benchmark-results.json --filter *
         
       - name: ⬆️ Upload Result Artifact
         uses: actions/upload-artifact@v4
@@ -73,7 +73,7 @@ jobs:
         run: cd benchmarks/AnimalTrack.BenchmarkRunner && dotnet run -c Release --exporters json --filter *
         
       - name: 🚚 Move Results File
-        run: mv './benchmarks/AnimalTrack.BenchmarkRunner/BenchmarkDotNet.Artifacts/results/BenchmarkRun-joined-$(date+'%Y-%m-%d)-report.json' ./branch-benchmark-results.json
+        run: mv './benchmarks/AnimalTrack.BenchmarkRunner/BenchmarkDotNet.Artifacts/results/BenchmarkRun-joined-$(date+'%Y-%m-%d')-report.json' ./branch-benchmark-results.json
 
       - name: ⬆️ Upload Result Artifact
         uses: actions/upload-artifact@v4
