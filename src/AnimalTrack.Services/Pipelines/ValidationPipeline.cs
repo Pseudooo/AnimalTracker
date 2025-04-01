@@ -1,3 +1,4 @@
+using AnimalTrack.Services.Exceptions;
 using FluentValidation;
 using MediatR;
 
@@ -17,10 +18,11 @@ public class ValidationPipeline<TRequest, TResponse>(
         var failures = validators.Select(x => x.Validate(validationContext))
             .SelectMany(x => x.Errors)
             .Where(x => x is not null)
+            .Select(x => x.ErrorMessage)
             .ToList();
         
         if(failures is not [])
-            throw new ValidationException(failures);
+            throw new RequestValidationException(failures);
 
         return await next();
     }
