@@ -62,6 +62,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
             Skip = (pageNumber - 1) * pageSize,
             Take = pageSize,
         };
+        await Task.Delay(TimeSpan.FromMilliseconds(10), cancellationToken);
         return await sqlClient.RunMultiResultQuery<AnimalEntity>(query, parameters, cancellationToken);
     }
 
