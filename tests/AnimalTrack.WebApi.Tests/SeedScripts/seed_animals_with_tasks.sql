@@ -1,7 +1,8 @@
 insert into animals (name, createdat)
 values
     ('Alice', NOW()),
-    ('Bob', NOW());
+    ('Bob', NOW()),
+    ('John', NOW());
 
 insert into AnimalTasks (AnimalId, Name, CreatedAt)
 values

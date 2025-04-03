@@ -13,6 +13,24 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     private readonly HttpClient _httpClient = animalTrackFixture.CreateClient();
 
     [Fact]
+    public async Task GivenKnownAnimalAndNewTask_WhenCreateTask_ShouldCreateAndReturnWith200()
+    {
+        // Arrange
+        var uri = new Uri("Animal/3/tasks", UriKind.Relative);
+        
+        // Act
+        var response = await _httpClient.PostAsync(uri, JsonContent.Create("My new task"));
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var createdTask = await response.Content.ReadFromJsonAsync<AnimalTaskModel>();
+        
+        // Assert
+        createdTask.ShouldNotBeNull();
+        createdTask.Id.ShouldNotBe(0);
+        createdTask.Name.ShouldBe("My new task");
+        createdTask.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+    }
+    
+    [Fact]
     public async Task GivenKnownAnimalWithTasks_WhenGetTasks_ShouldReturnTasksWith200()
     {
         // Arrange
