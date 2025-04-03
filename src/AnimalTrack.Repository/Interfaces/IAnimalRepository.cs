@@ -10,6 +10,12 @@ public interface IAnimalRepository
         int animalId,
         string note,
         CancellationToken cancellationToken = default);
+
+    Task<AnimalTaskEntity> InsertAnimalTask(
+        int animalId,
+        string name,
+        CancellationToken cancellationToken = default);
+    
     Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default);
     
     Task<List<AnimalNoteEntity>> GetAnimalNotes(

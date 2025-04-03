@@ -33,6 +33,23 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return result;
     }
 
+    public async Task<AnimalTaskEntity> InsertAnimalTask(
+        int animalId,
+        string name,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
+
+        var query = await provider.GetInsertAnimalTaskSqlText();
+        var parameters = new
+        {
+            AnimalId = animalId,
+            Name = name,
+        };
+        var result = await sqlClient.InsertSingle<AnimalTaskEntity>(query, parameters, cancellationToken);
+        return result;
+    }
+
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
         var query = await provider.GetAnimalByIdSqlText();
