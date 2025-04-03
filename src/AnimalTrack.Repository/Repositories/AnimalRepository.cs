@@ -65,6 +65,18 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return await sqlClient.RunMultiResultQuery<AnimalEntity>(query, parameters, cancellationToken);
     }
 
+    public async Task<List<AnimalTaskEntity>> GetAnimalTasks(
+        int animalId,
+        CancellationToken cancellationToken = default)
+    {
+        var query = await provider.GetAnimalTasksSqlText();
+        var parameters = new
+        {
+            AnimalId = animalId,
+        };
+        return await sqlClient.RunMultiResultQuery<AnimalTaskEntity>(query, parameters, cancellationToken);
+    }
+
     public async Task<bool> UpdateAnimal(int animalId, string name, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(animalId, nameof(animalId));
