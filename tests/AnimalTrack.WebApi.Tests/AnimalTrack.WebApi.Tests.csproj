@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="SeedScripts\seed_animals.sql">
+      <None Update="SeedScripts\**\*.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

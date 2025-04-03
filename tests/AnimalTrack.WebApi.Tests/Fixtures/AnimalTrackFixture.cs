@@ -9,18 +9,18 @@ namespace AnimalTrack.WebApi.Tests.Fixtures;
 
 public class AnimalTrackFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly DatabaseFixture _databaseFixture = new DatabaseFixtureBuilder()
+    protected DatabaseFixture DatabaseFixture = new DatabaseFixtureBuilder()
         .WithSeedScript("seed_animals.sql")
         .Build();
 
-    public async Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
-        await _databaseFixture.StartAsync();
+        await DatabaseFixture.StartAsync();
     }
 
     public new async Task DisposeAsync()
     {
-        await _databaseFixture.DisposeAsync();
+        await DatabaseFixture.DisposeAsync();
         await base.DisposeAsync();
     }
 
@@ -33,7 +33,7 @@ public class AnimalTrackFixture : WebApplicationFactory<Program>, IAsyncLifetime
             if (databaseConfigurationDescriptor is not null)
                 services.Remove(databaseConfigurationDescriptor);
 
-            services.AddSingleton(_databaseFixture.GetDatabaseConfiguration());
+            services.AddSingleton(DatabaseFixture.GetDatabaseConfiguration());
         });
         
         builder.UseEnvironment("Development");
