@@ -7,7 +7,8 @@ using Xunit;
 
 namespace AnimalTrack.WebApi.Tests.Animals;
 
-public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTrackFixture) : IClassFixture<AnimalTasksTests.AnimalTrackTasksFixture>
+public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTrackFixture) 
+    : IClassFixture<AnimalTasksTests.AnimalTrackTasksFixture>
 {
     private readonly HttpClient _httpClient = animalTrackFixture.CreateClient();
 
