@@ -30,4 +30,22 @@ public class AnimalTaskController(IMediator mediator) : ControllerBase
         var results = await mediator.Send(query, cancellationToken);
         return results;
     }
+
+    [HttpPut("tasks/{taskId}", Name = nameof(UpdateAnimalTask))]
+    public async Task<IActionResult> UpdateAnimalTask(
+        int taskId,
+        [FromBody] string name,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateAnimalTaskCommand(taskId, name);
+        var result = await mediator.Send(command, cancellationToken);
+        if (result)
+        {
+            return NoContent();
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
 }

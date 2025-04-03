@@ -109,6 +109,24 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         return updatedAnimal is not null;
     }
 
+    public async Task<bool> UpdateAnimalTask(
+        int animalTaskId,
+        string name,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        
+        var query = await provider.GetUpdateAnimalTaskSqlText();
+        var parameters = new
+        {
+            TaskId = animalTaskId,
+            Name = name,
+        };
+        var updatedAnimal = await sqlClient.UpdateSingle<AnimalTaskEntity>(query, parameters, cancellationToken);
+        
+        return updatedAnimal is not null;
+    }
+
     public async Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object>()

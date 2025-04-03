@@ -64,6 +64,32 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
         result.Count.ShouldBe(0);
     }
 
+    [Fact]
+    public async Task GivenKnownTask_WhenUpdate_ShouldReturn204()
+    {
+        // Arrange
+        var uri = new Uri("Animal/tasks/3", UriKind.Relative);
+
+        // Act
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create("my updated task"));
+        
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task GivenUnknownTask_WhenUpdate_ShouldReturn404()
+    {
+        // Arrange
+        var uri = new Uri("Animal/tasks/99", UriKind.Relative);
+
+        // Act
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create("my updated task"));
+        
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
     public class AnimalTrackTasksFixture : AnimalTrackFixture
     {
         public override async Task InitializeAsync()
