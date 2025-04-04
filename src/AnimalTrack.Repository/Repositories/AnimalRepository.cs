@@ -88,7 +88,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        var query = new UpdateAnimalTaskSqlQuery(animalId, name);
+        var query = new UpdateAnimalSqlQuery(animalId, name);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 
