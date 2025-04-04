@@ -7,7 +7,8 @@ using Xunit;
 
 namespace AnimalTrack.WebApi.Tests.Animals;
 
-public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<AnimalTrackFixture>
+public class AnimalTests(AnimalTests.AnimalTrackAnimalsFixture animalTrackFixture)
+    : IClassFixture<AnimalTests.AnimalTrackAnimalsFixture>
 {
     private readonly HttpClient _httpClient = animalTrackFixture.CreateClient();
 
@@ -114,5 +115,16 @@ public class AnimalTests(AnimalTrackFixture animalTrackFixture) : IClassFixture<
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    public class AnimalTrackAnimalsFixture : AnimalTrackFixture
+    {
+        public override async Task InitializeAsync()
+        {
+            DatabaseFixture = new DatabaseFixtureBuilder()
+                .WithSeedScript("seed_animals.sql")
+                .Build();
+            await DatabaseFixture.StartAsync();
+        }
     }
 }
