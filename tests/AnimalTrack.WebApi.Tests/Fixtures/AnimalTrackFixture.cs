@@ -7,16 +7,13 @@ using Xunit;
 
 namespace AnimalTrack.WebApi.Tests.Fixtures;
 
-public class AnimalTrackFixture : WebApplicationFactory<Program>, IAsyncLifetime
+public abstract class AnimalTrackFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     protected DatabaseFixture DatabaseFixture = new DatabaseFixtureBuilder()
         .WithSeedScript("seed_animals.sql")
         .Build();
 
-    public virtual async Task InitializeAsync()
-    {
-        await DatabaseFixture.StartAsync();
-    }
+    public abstract Task InitializeAsync();
 
     public new async Task DisposeAsync()
     {
