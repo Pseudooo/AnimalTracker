@@ -1,6 +1,8 @@
 using AnimalTrack.Repository.Entities;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Repository.Queries;
+using AnimalTrack.Repository.Queries.AnimalNoteQueries;
+using AnimalTrack.Repository.Queries.AnimalTaskQueries;
 
 namespace AnimalTrack.Repository.Repositories;
 
@@ -61,12 +63,8 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         int animalId,
         CancellationToken cancellationToken = default)
     {
-        var query = await provider.GetAnimalNotesSqlText();
-        var parameters = new
-        {
-            AnimalId = animalId,
-        };
-        return await sqlClient.RunMultiResultQuery<AnimalNoteEntity>(query, parameters, cancellationToken);
+        var query = new GetAnimalNotesSqlQuery(animalId);
+        return await sqlClient.RunMultiResultQuery(query, cancellationToken);
     }
 
     public async Task<List<AnimalEntity>> GetAnimalPage(
@@ -82,12 +80,8 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         int animalId,
         CancellationToken cancellationToken = default)
     {
-        var query = await provider.GetAnimalTasksSqlText();
-        var parameters = new
-        {
-            AnimalId = animalId,
-        };
-        return await sqlClient.RunMultiResultQuery<AnimalTaskEntity>(query, parameters, cancellationToken);
+        var query = new GetAnimalTasksSqlQuery(animalId);
+        return await sqlClient.RunMultiResultQuery(query, cancellationToken);
     }
 
     public async Task<bool> UpdateAnimal(int animalId, string name, CancellationToken cancellationToken = default)
