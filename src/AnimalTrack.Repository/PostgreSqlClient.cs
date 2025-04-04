@@ -8,6 +8,16 @@ namespace AnimalTrack.Repository;
 public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
+    public async Task<T> InsertEntity<T>(IInsertSqlCommand<T> command, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(command, nameof(command));
+
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(command.SqlText, command.Parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleAsync<T>(commandDefinition);
+    }
+    
     public async Task<T?> RunSingleResultQuery<T>(
         ISqlSelectQuery<T> selectQuery,
         CancellationToken cancellationToken = default)

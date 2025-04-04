@@ -3,7 +3,7 @@ using AnimalTrack.Repository.Interfaces.Queries;
 
 namespace AnimalTrack.Repository.Queries.AnimalTaskQueries;
 
-public class InsertAnimalTaskSqlSelectQuery(int animalId, string name) : ISqlSelectQuery<AnimalTaskEntity>
+public class InsertAnimalTaskSqlCommand(int animalId, string name) : IInsertSqlCommand<AnimalTaskEntity>
 {
     public string SqlText { get; } = """
                                      insert into AnimalTasks (AnimalId, Name)

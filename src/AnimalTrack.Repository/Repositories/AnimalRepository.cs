@@ -13,16 +13,16 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = new InsertAnimalSqlSelectQuery(name);
-        return await sqlClient.RunSingleResultQuery(query, cancellationToken);
+        var query = new InsertAnimalSqlCommand(name);
+        return await sqlClient.InsertEntity(query, cancellationToken);
     }
 
     public async Task<AnimalNoteEntity> InsertAnimalNote(int animalId, string note, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(note, nameof(note));
         
-        var query = new InsertAnimalNoteSqlSelectQuery(animalId, note);
-        return await sqlClient.RunSingleResultQuery(query, cancellationToken);
+        var command = new InsertAnimalNoteSqlCommand(animalId, note);
+        return await sqlClient.InsertEntity(command, cancellationToken);
     }
 
     public async Task<AnimalTaskEntity> InsertAnimalTask(
@@ -32,8 +32,8 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = new InsertAnimalTaskSqlSelectQuery(animalId, name);
-        return await sqlClient.RunSingleResultQuery(query, cancellationToken);
+        var query = new InsertAnimalTaskSqlCommand(animalId, name);
+        return await sqlClient.InsertEntity(query, cancellationToken);
     }
 
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
