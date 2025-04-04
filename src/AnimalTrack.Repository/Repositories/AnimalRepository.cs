@@ -86,17 +86,10 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
 
     public async Task<bool> UpdateAnimal(int animalId, string name, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(animalId, nameof(animalId));
-
-        var query = await provider.GetUpdateAnimalSqlText();
-        var parameters = new
-        {
-            Id = animalId,
-            Name = name,
-        };
-        var updatedAnimal = await sqlClient.UpdateSingle<AnimalEntity>(query, parameters, cancellationToken);
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        return updatedAnimal is not null;
+        var query = new UpdateAnimalTaskSqlQuery(animalId, name);
+        return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 
     public async Task<bool> UpdateAnimalTask(
@@ -104,17 +97,10 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         string name,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        var query = await provider.GetUpdateAnimalTaskSqlText();
-        var parameters = new
-        {
-            TaskId = animalTaskId,
-            Name = name,
-        };
-        var updatedAnimal = await sqlClient.UpdateSingle<AnimalTaskEntity>(query, parameters, cancellationToken);
-        
-        return updatedAnimal is not null;
+        var query = new UpdateAnimalTaskSqlQuery(animalTaskId, name);
+        return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 
     public async Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default)
