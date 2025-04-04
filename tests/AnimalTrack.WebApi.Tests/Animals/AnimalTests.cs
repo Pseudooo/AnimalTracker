@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using AnimalTrack.ClientModels;
+using AnimalTrack.WebApi.Tests.Extensions;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
 using Xunit;
@@ -28,10 +29,20 @@ public class AnimalTests(AnimalTests.AnimalTrackAnimalsFixture animalTrackFixtur
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
         var animalModel = await result.Content.ReadFromJsonAsync<AnimalModel>();
         
+        // Assert
         animalModel.ShouldNotBeNull();
         animalModel.Id.ShouldNotBe(0);
         animalModel.Name.ShouldBe(name);
         animalModel.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        
+        var createdId = animalModel.Id;
+        await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("Animals", createdId, reader =>
+        {
+            reader["Name"].ShouldBe(name);
+            reader["CreatedAt"].ShouldBeOfType<DateTime>();
+            var createdAt = (DateTime)reader["CreatedAt"];
+            createdAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        });
     }
     
     [Fact]
@@ -98,10 +109,14 @@ public class AnimalTests(AnimalTests.AnimalTrackAnimalsFixture animalTrackFixtur
         var uri = new Uri($"Animal/3", UriKind.Relative);
         
         // Act
-        var response = await _httpClient.PutAsync(uri, JsonContent.Create("sam"));
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create("Sam"));
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+        await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("Animals", 3, reader =>
+        {
+            reader["Name"].ShouldBe("Sam");
+        });
     }
 
     [Fact]
