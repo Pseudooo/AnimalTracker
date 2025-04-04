@@ -7,15 +7,6 @@ namespace AnimalTrack.Repository;
 public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
-    public async Task<T> InsertSingle<T>(string query, object? parameters, CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
-
-        await using var connection = await GetOpenConnection(cancellationToken);
-        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
-        return await connection.QuerySingleAsync<T>(commandDefinition);
-    }
-
     public async Task<T?> RunSingleResultQuery<T>(
         ITypedSqlQuery<T> query,
         CancellationToken cancellationToken = default)
@@ -39,19 +30,6 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         var commandDefinition = new CommandDefinition(query.SqlText, query.Parameters, cancellationToken: cancellationToken);
         var results = await connection.QueryAsync<T>(commandDefinition);
         return results.ToList();
-    }
-
-    public async Task<T?> UpdateSingle<T>(
-        string query,
-        object? parameters,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
-        
-        await using var connection = await GetOpenConnection(cancellationToken);
-        
-        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
-        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
     public async Task<int> RunNonQuery(
