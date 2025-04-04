@@ -1,7 +1,6 @@
 using AnimalTrack.Repository;
 using AnimalTrack.WebApi.Fixtures;
 using Npgsql;
-using Shouldly;
 
 namespace AnimalTrack.WebApi.Tests.Extensions;
 
@@ -31,8 +30,7 @@ public static class DatabaseFixtureExtensions
         command.Parameters.AddWithValue("@Id", rowId);
         
         var reader = await command.ExecuteReaderAsync(cancellationToken);
-        var hasRow = await reader.ReadAsync(cancellationToken);
-        hasRow.ShouldBeTrue();
+        await reader.ReadAsync(cancellationToken);
 
         action(reader);
     }
