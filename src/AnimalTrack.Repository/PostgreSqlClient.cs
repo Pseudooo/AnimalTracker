@@ -1,4 +1,5 @@
 using AnimalTrack.Repository.Interfaces;
+using AnimalTrack.Repository.Interfaces.Queries;
 using Dapper;
 using Npgsql;
 
@@ -8,26 +9,26 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
     public async Task<T?> RunSingleResultQuery<T>(
-        ITypedSqlQuery<T> query,
+        ISqlSelectQuery<T> selectQuery,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
+        ArgumentNullException.ThrowIfNull(selectQuery, nameof(selectQuery));
 
         await using var connection = await GetOpenConnection(cancellationToken);
         
-        var commandDefinition = new CommandDefinition(query.SqlText, query.Parameters, cancellationToken: cancellationToken);
+        var commandDefinition = new CommandDefinition(selectQuery.SqlText, selectQuery.Parameters, cancellationToken: cancellationToken);
         return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
     public async Task<List<T>> RunMultiResultQuery<T>(
-        ITypedSqlQuery<T> query,
+        ISqlSelectQuery<T> selectQuery,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
+        ArgumentNullException.ThrowIfNull(selectQuery, nameof(selectQuery));
 
         await using var connection = await GetOpenConnection(cancellationToken);
         
-        var commandDefinition = new CommandDefinition(query.SqlText, query.Parameters, cancellationToken: cancellationToken);
+        var commandDefinition = new CommandDefinition(selectQuery.SqlText, selectQuery.Parameters, cancellationToken: cancellationToken);
         var results = await connection.QueryAsync<T>(commandDefinition);
         return results.ToList();
     }

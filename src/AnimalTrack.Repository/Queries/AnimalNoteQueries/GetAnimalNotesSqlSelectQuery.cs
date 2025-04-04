@@ -1,9 +1,9 @@
 using AnimalTrack.Repository.Entities;
-using AnimalTrack.Repository.Interfaces;
+using AnimalTrack.Repository.Interfaces.Queries;
 
 namespace AnimalTrack.Repository.Queries.AnimalNoteQueries;
 
-public class GetAnimalNotesSqlQuery(int animalId) : ITypedSqlQuery<AnimalNoteEntity>
+public class GetAnimalNotesSqlSelectQuery(int animalId) : ISqlSelectQuery<AnimalNoteEntity>
 {
     public string SqlText { get; } = """
                                      select

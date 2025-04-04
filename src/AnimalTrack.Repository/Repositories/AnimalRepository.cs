@@ -13,7 +13,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = new InsertAnimalSqlQuery(name);
+        var query = new InsertAnimalSqlSelectQuery(name);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
@@ -21,7 +21,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(note, nameof(note));
         
-        var query = new InsertAnimalNoteSqlQuery(animalId, note);
+        var query = new InsertAnimalNoteSqlSelectQuery(animalId, note);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
@@ -32,13 +32,13 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = new InsertAnimalTaskSqlQuery(animalId, name);
+        var query = new InsertAnimalTaskSqlSelectQuery(animalId, name);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
     {
-        var query = new GetAnimalByIdSqlQuery(id);
+        var query = new GetAnimalByIdSqlSelectQuery(id);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
@@ -46,7 +46,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         int animalId,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAnimalNotesSqlQuery(animalId);
+        var query = new GetAnimalNotesSqlSelectQuery(animalId);
         return await sqlClient.RunMultiResultQuery(query, cancellationToken);
     }
 
@@ -55,7 +55,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAnimalPageSqlQuery(pageSize, pageNumber);
+        var query = new GetAnimalPageSqlSelectQuery(pageSize, pageNumber);
         return await sqlClient.RunMultiResultQuery(query, cancellationToken);
     }
 
@@ -63,7 +63,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
         int animalId,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAnimalTasksSqlQuery(animalId);
+        var query = new GetAnimalTasksSqlSelectQuery(animalId);
         return await sqlClient.RunMultiResultQuery(query, cancellationToken);
     }
 
@@ -71,7 +71,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        var query = new UpdateAnimalSqlQuery(animalId, name);
+        var query = new UpdateAnimalSqlSelectQuery(animalId, name);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 
@@ -82,7 +82,7 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        var query = new UpdateAnimalTaskSqlQuery(animalTaskId, name);
+        var query = new UpdateAnimalTaskSqlSelectQuery(animalTaskId, name);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 

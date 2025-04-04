@@ -1,9 +1,9 @@
 using AnimalTrack.Repository.Entities;
-using AnimalTrack.Repository.Interfaces;
+using AnimalTrack.Repository.Interfaces.Queries;
 
 namespace AnimalTrack.Repository.Queries.AnimalTaskQueries;
 
-public class UpdateAnimalTaskSqlQuery(int taskId, string name) : ITypedSqlQuery<AnimalTaskEntity>
+public class UpdateAnimalTaskSqlSelectQuery(int taskId, string name) : ISqlSelectQuery<AnimalTaskEntity>
 {
     public string SqlText { get; } = """
                                      update AnimalTasks

@@ -1,10 +1,12 @@
+using AnimalTrack.Repository.Interfaces.Queries;
+
 namespace AnimalTrack.Repository.Interfaces;
 
 public interface IPostgreSqlClient
 {
-    Task<T?> RunSingleResultQuery<T>(ITypedSqlQuery<T> query, CancellationToken cancellationToken = default);
+    Task<T?> RunSingleResultQuery<T>(ISqlSelectQuery<T> selectQuery, CancellationToken cancellationToken = default);
 
-    Task<List<T>> RunMultiResultQuery<T>(ITypedSqlQuery<T> query, CancellationToken cancellationToken = default);
+    Task<List<T>> RunMultiResultQuery<T>(ISqlSelectQuery<T> selectQuery, CancellationToken cancellationToken = default);
     
     Task<int> RunNonQuery(
         string query,

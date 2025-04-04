@@ -1,9 +1,9 @@
 using AnimalTrack.Repository.Entities;
-using AnimalTrack.Repository.Interfaces;
+using AnimalTrack.Repository.Interfaces.Queries;
 
 namespace AnimalTrack.Repository.Queries.AnimalTaskQueries;
 
-public class InsertAnimalTaskSqlQuery(int animalId, string name) : ITypedSqlQuery<AnimalTaskEntity>
+public class InsertAnimalTaskSqlSelectQuery(int animalId, string name) : ISqlSelectQuery<AnimalTaskEntity>
 {
     public string SqlText { get; } = """
                                      insert into AnimalTasks (AnimalId, Name)
