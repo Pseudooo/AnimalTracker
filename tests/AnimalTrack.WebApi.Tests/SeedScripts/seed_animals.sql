@@ -2,6 +2,4 @@ insert into animals (name, createdat)
     values
         ('Alice', NOW()),
         ('Bob', NOW()),
-        ('John', NOW()),
-        ('Alan', NOW()),
-        ('James', NOW());
+        ('John', NOW());
