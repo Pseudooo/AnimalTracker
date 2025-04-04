@@ -1,4 +1,5 @@
 using AnimalTrack.Repository.Interfaces;
+using AnimalTrack.Repository.Interfaces.Queries;
 using Dapper;
 using Npgsql;
 
@@ -7,53 +8,39 @@ namespace AnimalTrack.Repository;
 public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
     : IPostgreSqlClient
 {
-    public async Task<T> InsertSingle<T>(string query, object? parameters, CancellationToken cancellationToken = default)
+    public async Task<T> InsertEntity<T>(IInsertSqlCommand<T> command, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
+        ArgumentNullException.ThrowIfNull(command, nameof(command));
 
         await using var connection = await GetOpenConnection(cancellationToken);
-        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(command.SqlText, command.Parameters, cancellationToken: cancellationToken);
         return await connection.QuerySingleAsync<T>(commandDefinition);
     }
     
     public async Task<T?> RunSingleResultQuery<T>(
-        string queryText,
-        object? parameters,
+        ISqlSelectQuery<T> selectQuery,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(queryText, nameof(queryText));
-        
+        ArgumentNullException.ThrowIfNull(selectQuery, nameof(selectQuery));
+
         await using var connection = await GetOpenConnection(cancellationToken);
         
-        var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        var commandDefinition = new CommandDefinition(selectQuery.SqlText, selectQuery.Parameters, cancellationToken: cancellationToken);
         return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
     public async Task<List<T>> RunMultiResultQuery<T>(
-        string queryText,
-        object? parameters,
+        ISqlSelectQuery<T> selectQuery,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(queryText, nameof(queryText));
-        
+        ArgumentNullException.ThrowIfNull(selectQuery, nameof(selectQuery));
+
         await using var connection = await GetOpenConnection(cancellationToken);
         
-        var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        var commandDefinition = new CommandDefinition(selectQuery.SqlText, selectQuery.Parameters, cancellationToken: cancellationToken);
         var results = await connection.QueryAsync<T>(commandDefinition);
         return results.ToList();
-    }
-
-    public async Task<T?> UpdateSingle<T>(
-        string query,
-        object? parameters,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(query, nameof(query));
-        
-        await using var connection = await GetOpenConnection(cancellationToken);
-        
-        var commandDefinition = new CommandDefinition(query, parameters, cancellationToken: cancellationToken);
-        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
     public async Task<int> RunNonQuery(
