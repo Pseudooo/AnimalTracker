@@ -13,27 +13,16 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = await provider.GetInsertAnimalSqlText();
-        var parameters = new
-        {
-            Name = name,
-        };
-        var result = await sqlClient.InsertSingle<AnimalEntity>(query, parameters, cancellationToken);
-        return result;
+        var query = new InsertAnimalSqlQuery(name);
+        return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
     public async Task<AnimalNoteEntity> InsertAnimalNote(int animalId, string note, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(note, nameof(note));
         
-        var query = await provider.GetInsertAnimalNoteSqlText();
-        var parameters = new
-        {
-            AnimalId = animalId,
-            Note = note,
-        };
-        var result = await sqlClient.InsertSingle<AnimalNoteEntity>(query, parameters, cancellationToken);
-        return result;
+        var query = new InsertAnimalNoteSqlQuery(animalId, note);
+        return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
     public async Task<AnimalTaskEntity> InsertAnimalTask(
@@ -43,14 +32,8 @@ public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClie
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = await provider.GetInsertAnimalTaskSqlText();
-        var parameters = new
-        {
-            AnimalId = animalId,
-            Name = name,
-        };
-        var result = await sqlClient.InsertSingle<AnimalTaskEntity>(query, parameters, cancellationToken);
-        return result;
+        var query = new InsertAnimalTaskSqlQuery(animalId, name);
+        return await sqlClient.RunSingleResultQuery(query, cancellationToken);
     }
 
     public async Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default)
