@@ -29,6 +29,18 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
     }
 
+    public async Task<T?> RunSingleResultQuery<T>(
+        ITypedSqlQuery<T> query,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query, nameof(query));
+
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(query.SqlText, query.Parameters, cancellationToken: cancellationToken);
+        return await connection.QuerySingleOrDefaultAsync<T>(commandDefinition);
+    }
+
     public async Task<List<T>> RunMultiResultQuery<T>(
         string queryText,
         object? parameters,
@@ -39,6 +51,19 @@ public class PostgreSqlClient(IPostgreSqlConnectionFactory connectionFactory)
         await using var connection = await GetOpenConnection(cancellationToken);
         
         var commandDefinition = new CommandDefinition(queryText, parameters, cancellationToken: cancellationToken);
+        var results = await connection.QueryAsync<T>(commandDefinition);
+        return results.ToList();
+    }
+
+    public async Task<List<T>> RunMultiResultQuery<T>(
+        ITypedSqlQuery<T> query,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query, nameof(query));
+
+        await using var connection = await GetOpenConnection(cancellationToken);
+        
+        var commandDefinition = new CommandDefinition(query.SqlText, query.Parameters, cancellationToken: cancellationToken);
         var results = await connection.QueryAsync<T>(commandDefinition);
         return results.ToList();
     }
