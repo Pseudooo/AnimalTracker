@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using AnimalTrack.ClientModels.Models.Animals;
+using AnimalTrack.WebApi.Tests.Extensions;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
 using Xunit;
@@ -16,12 +17,25 @@ public class AnimalNotesTests(AnimalNotesTests.AnimalTrackNotesFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/2/notes", UriKind.Relative);
+        const string note = "This is a cool note";
         
         // Act
-        var response = await _httpClient.PostAsync(uri, JsonContent.Create("This is a cool note"));
+        var response = await _httpClient.PostAsync(uri, JsonContent.Create(note));
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var createdNote = await response.Content.ReadFromJsonAsync<AnimalNoteModel>();
         
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        createdNote.ShouldNotBeNull();
+        createdNote.Id.ShouldNotBe(0);
+        createdNote.Note.ShouldBe(note);
+        createdNote.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalNotes", createdNote.Id, reader =>
+        {
+            reader["Note"].ShouldBe(note);
+            reader["CreatedAt"].ShouldBeOfType<DateTime>();
+            var createdAt = (DateTime)reader["CreatedAt"];
+            createdAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        });
     }
     
     [Theory]
@@ -69,6 +83,10 @@ public class AnimalNotesTests(AnimalNotesTests.AnimalTrackNotesFixture animalTra
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+        await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalNotes", 3, reader =>
+        {
+            reader.HasRows.ShouldBeFalse();
+        });
     }
 
     [Fact]

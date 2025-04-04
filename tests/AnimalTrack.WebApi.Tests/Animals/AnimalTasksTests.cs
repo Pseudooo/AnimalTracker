@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using AnimalTrack.ClientModels.Models.Animals;
+using AnimalTrack.WebApi.Tests.Extensions;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
 using Xunit;
@@ -17,17 +18,26 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/3/tasks", UriKind.Relative);
+        const string name = "My new task";
         
         // Act
-        var response = await _httpClient.PostAsync(uri, JsonContent.Create("My new task"));
+        var response = await _httpClient.PostAsync(uri, JsonContent.Create(name));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var createdTask = await response.Content.ReadFromJsonAsync<AnimalTaskModel>();
         
         // Assert
         createdTask.ShouldNotBeNull();
         createdTask.Id.ShouldNotBe(0);
-        createdTask.Name.ShouldBe("My new task");
+        createdTask.Name.ShouldBe(name);
         createdTask.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalTasks", createdTask.Id, reader =>
+        {
+            reader.HasRows.ShouldBeTrue();
+            reader["Name"].ShouldBe(name);
+            reader["CreatedAt"].ShouldBeOfType<DateTime>();
+            var createdAt = (DateTime)reader["CreatedAt"];
+            createdAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        });
     }
     
     [Fact]
@@ -69,12 +79,17 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/tasks/3", UriKind.Relative);
-
+        const string newName = "My updated task";
+        
         // Act
-        var response = await _httpClient.PutAsync(uri, JsonContent.Create("my updated task"));
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create(newName));
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+        await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalTasks", 3, reader =>
+        {
+            reader["Name"].ShouldBe(newName);
+        });
     }
 
     [Fact]
