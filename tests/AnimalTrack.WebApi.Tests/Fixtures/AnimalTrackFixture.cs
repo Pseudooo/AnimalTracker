@@ -9,7 +9,7 @@ namespace AnimalTrack.WebApi.Tests.Fixtures;
 
 public abstract class AnimalTrackFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    protected DatabaseFixture DatabaseFixture = new DatabaseFixtureBuilder()
+    public DatabaseFixture DatabaseFixture { get; protected set; } = new DatabaseFixtureBuilder()
         .WithSeedScript("seed_animals.sql")
         .Build();
 
