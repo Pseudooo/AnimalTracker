@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AnimalTrack.Configuration;
 using AnimalTrack.WebApi.Fixtures;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +22,12 @@ public abstract class AnimalTrackFixture : WebApplicationFactory<Program>, IAsyn
         await DatabaseFixture.DisposeAsync();
         await base.DisposeAsync();
     }
+    
+    public JsonSerializerOptions JsonSerializerOptions => new()
+    {
+        Converters = { new JsonStringEnumConverter() },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

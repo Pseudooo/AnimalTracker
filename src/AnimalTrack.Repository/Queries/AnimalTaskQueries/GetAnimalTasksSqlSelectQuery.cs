@@ -10,6 +10,7 @@ public class GetAnimalTasksSqlSelectQuery(int animalId) : ISqlSelectQuery<Animal
                                                 Id,
                                                 AnimalId,
                                                 Name,
+                                                Frequency,
                                                 CreatedAt
                                             from AnimalTasks
                                                 where AnimalId = @AnimalId

@@ -1,3 +1,4 @@
+using AnimalTrack.ClientModels.Constants;
 using AnimalTrack.ClientModels.Models.Animals;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Services.Requests.Commands;
@@ -10,12 +11,24 @@ public class CreateAnimalTaskHandler(IAnimalRepository animalRepository)
 {
     public async Task<AnimalTaskModel> Handle(CreateAnimalTaskCommand request, CancellationToken cancellationToken)
     {
-        var entity = await animalRepository.InsertAnimalTask(request.AnimalId, request.Name, cancellationToken);
+        var entity = await animalRepository.InsertAnimalTask(
+            request.AnimalId,
+            request.Name,
+            request.Frequency,
+            request.ScheduledFor,
+            cancellationToken);
+        if (!Enum.TryParse<SchedulingFrequency>(entity.Frequency, out var schedulingFrequency))
+        {
+            throw new Exception($"Invalid SchedulingFrequency value for task entity Id={entity.Id}: {schedulingFrequency}");
+        }
+        
         return new AnimalTaskModel()
         {
             Id = entity.Id,
             Name = entity.Name,
             CreatedAt = entity.CreatedAt,
+            Frequency = schedulingFrequency,
+            ScheduledFor = entity.ScheduledFor
         };
     }
 }

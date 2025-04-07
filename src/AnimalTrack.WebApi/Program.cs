@@ -1,9 +1,12 @@
+using System.Text.Json.Serialization;
 using AnimalTrack.Configuration;
 using AnimalTrack.Repository;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Repository.Repositories;
+using AnimalTrack.Repository.TypeHandlers;
 using AnimalTrack.Services.Extensions;
 using Asp.Versioning;
+using Dapper;
 using Microsoft.OpenApi.Models;
 
 namespace AnimalTrack.WebApi;
@@ -35,7 +38,11 @@ public class Program
                 Version = "v1.0",
             });
         });
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         RegisterRepositoryDependencies(builder.Services, builder.Configuration);
         builder.Services.RegisterServiceDependencies();
@@ -61,6 +68,8 @@ public class Program
             services.AddTransient<IPostgreSqlConnectionFactory, PostgreSqlConnectionFactory>();
             services.AddTransient<IPostgreSqlClient, PostgreSqlClient>();
             services.AddTransient<IAnimalRepository, AnimalRepository>();
+            
+            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         }
     }
 }

@@ -1,6 +1,7 @@
 using AnimalTrack.ClientModels.Models.Animals;
 using AnimalTrack.Services.Requests.Commands;
 using AnimalTrack.Services.Requests.Queries;
+using AnimalTrack.WebApi.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,10 @@ public class AnimalTaskController(IMediator mediator) : ControllerBase
     [HttpPost("{animalId}/tasks")]
     public async Task<ActionResult<AnimalTaskModel>> CreateAnimalTask(
         int animalId,
-        [FromBody] string name,
+        [FromBody] AnimalTaskRequestBody body,
         CancellationToken cancellationToken)
     {
-        var command = new CreateAnimalTaskCommand(animalId, name);
+        var command = new CreateAnimalTaskCommand(animalId, body.Name, body.Frequency, body.ScheduledFor);
         var result = await mediator.Send(command, cancellationToken);
         return result;
     }
@@ -34,10 +35,10 @@ public class AnimalTaskController(IMediator mediator) : ControllerBase
     [HttpPut("tasks/{taskId}", Name = nameof(UpdateAnimalTask))]
     public async Task<IActionResult> UpdateAnimalTask(
         int taskId,
-        [FromBody] string name,
+        [FromBody] AnimalTaskRequestBody body,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateAnimalTaskCommand(taskId, name);
+        var command = new UpdateAnimalTaskCommand(taskId, body.Name, body.Frequency, body.ScheduledFor);
         var result = await mediator.Send(command, cancellationToken);
         if (result)
         {

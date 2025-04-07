@@ -9,6 +9,11 @@ public class UpdateAnimalTaskHandler(IAnimalRepository animalRepository)
 {
     public async Task<bool> Handle(UpdateAnimalTaskCommand request, CancellationToken cancellationToken)
     {
-        return await animalRepository.UpdateAnimalTask(request.AnimalTaskId, request.Name, cancellationToken);
+        return await animalRepository.UpdateAnimalTask(
+            request.AnimalTaskId,
+            request.Name,
+            request.Frequency,
+            request.ScheduledFor,
+            cancellationToken);;
     }
 }
