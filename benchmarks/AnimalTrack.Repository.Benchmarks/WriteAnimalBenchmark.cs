@@ -1,5 +1,4 @@
 using AnimalTrack.Repository.Interfaces;
-using AnimalTrack.Repository.Providers;
 using AnimalTrack.Repository.Repositories;
 using AnimalTrack.WebApi.Fixtures;
 using AnimalTrack.WebApi.Tests.Fixtures;
@@ -24,8 +23,7 @@ public class WriteAnimalBenchmark
         var databaseConfiguration = _databaseFixture.GetDatabaseConfiguration();
         var postgreSqlConnectionFactory = new PostgreSqlConnectionFactory(databaseConfiguration);
         var postgreSqlClient = new PostgreSqlClient(postgreSqlConnectionFactory);
-        var postgreSqlQueryProvider = new PostgreSqlQueryProvider();
-        _animalRepository = new AnimalRepository(postgreSqlQueryProvider, postgreSqlClient);
+        _animalRepository = new AnimalRepository(postgreSqlClient);
     }
 
     [GlobalCleanup]

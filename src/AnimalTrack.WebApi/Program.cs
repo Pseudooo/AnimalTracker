@@ -1,7 +1,6 @@
 using AnimalTrack.Configuration;
 using AnimalTrack.Repository;
 using AnimalTrack.Repository.Interfaces;
-using AnimalTrack.Repository.Providers;
 using AnimalTrack.Repository.Repositories;
 using AnimalTrack.Services.Extensions;
 using Asp.Versioning;
@@ -61,7 +60,6 @@ public class Program
             services.AddSingleton(databaseConfiguration);
             services.AddTransient<IPostgreSqlConnectionFactory, PostgreSqlConnectionFactory>();
             services.AddTransient<IPostgreSqlClient, PostgreSqlClient>();
-            services.AddTransient<IPostgreSqlQueryProvider, PostgreSqlQueryProvider>();
             services.AddTransient<IAnimalRepository, AnimalRepository>();
         }
     }

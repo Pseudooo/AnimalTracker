@@ -6,7 +6,7 @@ using AnimalTrack.Repository.Queries.AnimalTaskQueries;
 
 namespace AnimalTrack.Repository.Repositories;
 
-public class AnimalRepository(IPostgreSqlQueryProvider provider, IPostgreSqlClient sqlClient)
+public class AnimalRepository(IPostgreSqlClient sqlClient)
     : IAnimalRepository
 {
     public async Task<AnimalEntity> InsertAnimal(string name, CancellationToken cancellationToken = default)
