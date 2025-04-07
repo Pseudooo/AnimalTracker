@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AnimalTrack.Configuration;
 using AnimalTrack.Repository;
 using AnimalTrack.Repository.Interfaces;
@@ -35,7 +36,11 @@ public class Program
                 Version = "v1.0",
             });
         });
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         RegisterRepositoryDependencies(builder.Services, builder.Configuration);
         builder.Services.RegisterServiceDependencies();

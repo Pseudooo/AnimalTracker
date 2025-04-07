@@ -7,5 +7,6 @@ create table if not exists AnimalTasks
         references Animals (Id),
     Name text not null,
     CreatedAt timestamp with time zone not null
-        default (now() at time zone 'utc')
+        default (now() at time zone 'utc'),
+    Frequency text not null
 )

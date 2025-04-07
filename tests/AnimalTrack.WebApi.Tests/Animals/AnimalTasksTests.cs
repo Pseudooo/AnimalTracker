@@ -1,6 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using AnimalTrack.ClientModels.Constants;
 using AnimalTrack.ClientModels.Models.Animals;
+using AnimalTrack.WebApi.Requests;
 using AnimalTrack.WebApi.Tests.Extensions;
 using AnimalTrack.WebApi.Tests.Fixtures;
 using Shouldly;
@@ -18,22 +22,33 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/3/tasks", UriKind.Relative);
-        const string name = "My new task";
+        var body = new CreateAnimalTaskRequestBody()
+        {
+            Name = "My new task",
+            Frequency = SchedulingFrequency.OneOff,
+        };
+        var jsonOptions = new JsonSerializerOptions()
+        {
+            Converters = { new JsonStringEnumConverter() },
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
         
         // Act
-        var response = await _httpClient.PostAsync(uri, JsonContent.Create(name));
+        var response = await _httpClient.PostAsync(uri, JsonContent.Create(body, options: jsonOptions));
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
-        var createdTask = await response.Content.ReadFromJsonAsync<AnimalTaskModel>();
+        var createdTask = await response.Content.ReadFromJsonAsync<AnimalTaskModel>(jsonOptions);
         
         // Assert
         createdTask.ShouldNotBeNull();
         createdTask.Id.ShouldNotBe(0);
-        createdTask.Name.ShouldBe(name);
+        createdTask.Name.ShouldBe(body.Name);
+        createdTask.Frequency.ShouldBe(body.Frequency);
         createdTask.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
         await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalTasks", createdTask.Id, reader =>
         {
             reader.HasRows.ShouldBeTrue();
-            reader["Name"].ShouldBe(name);
+            reader["Name"].ShouldBe(body.Name);
+            reader["Frequency"].ShouldBe(body.Frequency.ToString());
             reader["CreatedAt"].ShouldBeOfType<DateTime>();
             var createdAt = (DateTime)reader["CreatedAt"];
             createdAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
@@ -49,7 +64,7 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
         // Act
         var response = await _httpClient.GetAsync(uri);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
-        var result = await response.Content.ReadFromJsonAsync<List<AnimalTaskModel>>();
+        var result = await response.Content.ReadFromJsonAsync<List<AnimalTaskModel>>(animalTrackFixture.JsonSerializerOptions);
         
         // Assert
         result.ShouldNotBeNull();
@@ -79,16 +94,21 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/tasks/3", UriKind.Relative);
-        const string newName = "My updated task";
+        var body = new CreateAnimalTaskRequestBody()
+        {
+            Name = "My updated task",
+            Frequency = SchedulingFrequency.Daily,
+        };
         
         // Act
-        var response = await _httpClient.PutAsync(uri, JsonContent.Create(newName));
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create(body, options: animalTrackFixture.JsonSerializerOptions));
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
         await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalTasks", 3, reader =>
         {
-            reader["Name"].ShouldBe(newName);
+            reader["Name"].ShouldBe(body.Name);
+            reader["Frequency"].ShouldBe(body.Frequency.ToString());
         });
     }
 
@@ -97,9 +117,14 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/tasks/99", UriKind.Relative);
+        var body = new CreateAnimalTaskRequestBody()
+        {
+            Name = "my updated task",
+            Frequency = SchedulingFrequency.Daily
+        };
 
         // Act
-        var response = await _httpClient.PutAsync(uri, JsonContent.Create("my updated task"));
+        var response = await _httpClient.PutAsync(uri, JsonContent.Create(body, options: animalTrackFixture.JsonSerializerOptions));
         
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);

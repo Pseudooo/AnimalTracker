@@ -1,3 +1,4 @@
+using AnimalTrack.ClientModels.Constants;
 using AnimalTrack.Services.Requests.Commands;
 using AnimalTrack.Services.Validators.Animals.Tasks;
 using FluentValidation.TestHelper;
@@ -12,7 +13,7 @@ public class CreateAnimalTaskCommandValidatorTests
     public void GivenValidCommand_WhenValidate_ShouldPass()
     {
         // Arrange
-        var command = new CreateAnimalTaskCommand(10, "John");
+        var command = new CreateAnimalTaskCommand(10, "John", SchedulingFrequency.OneOff);
         
         // Act
         var result = _validatorTests.TestValidate(command);
@@ -29,7 +30,7 @@ public class CreateAnimalTaskCommandValidatorTests
     public void GivenInvalidCommand_WhenValidate_ShouldFail(string name)
     {
         // Arrange
-        var command = new CreateAnimalTaskCommand(10, name);
+        var command = new CreateAnimalTaskCommand(10, name, SchedulingFrequency.OneOff);
         
         // Act
         var result = _validatorTests.TestValidate(command);

@@ -1,3 +1,4 @@
+using AnimalTrack.ClientModels.Constants;
 using AnimalTrack.Repository.Entities;
 
 namespace AnimalTrack.Repository.Interfaces;
@@ -14,6 +15,7 @@ public interface IAnimalRepository
     Task<AnimalTaskEntity> InsertAnimalTask(
         int animalId,
         string name,
+        SchedulingFrequency schedulingFrequency,
         CancellationToken cancellationToken = default);
     
     Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default);
@@ -33,7 +35,11 @@ public interface IAnimalRepository
     
     Task<bool> UpdateAnimal(int animalId, string name, CancellationToken cancellationToken = default);
 
-    Task<bool> UpdateAnimalTask(int animalTaskId, string name, CancellationToken cancellationToken = default);
+    Task<bool> UpdateAnimalTask(
+        int animalTaskId,
+        string name,
+        SchedulingFrequency frequency,
+        CancellationToken cancellationToken = default);
     
     Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default);
 }

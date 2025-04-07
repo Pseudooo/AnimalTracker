@@ -1,3 +1,4 @@
+using AnimalTrack.ClientModels.Constants;
 using AnimalTrack.Repository.Entities;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Repository.Queries;
@@ -28,11 +29,12 @@ public class AnimalRepository(IPostgreSqlClient sqlClient)
     public async Task<AnimalTaskEntity> InsertAnimalTask(
         int animalId,
         string name,
+        SchedulingFrequency schedulingFrequency,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = new InsertAnimalTaskSqlCommand(animalId, name);
+        var query = new InsertAnimalTaskSqlCommand(animalId, name, schedulingFrequency.ToString());
         return await sqlClient.InsertEntity(query, cancellationToken);
     }
 
@@ -78,11 +80,12 @@ public class AnimalRepository(IPostgreSqlClient sqlClient)
     public async Task<bool> UpdateAnimalTask(
         int animalTaskId,
         string name,
+        SchedulingFrequency frequency,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        var query = new UpdateAnimalTaskSqlSelectQuery(animalTaskId, name);
+        var query = new UpdateAnimalTaskSqlSelectQuery(animalTaskId, name, frequency.ToString());
         return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 
