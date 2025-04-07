@@ -13,7 +13,7 @@ public class CreateAnimalTaskCommandValidatorTests
     public void GivenValidCommand_WhenValidate_ShouldPass()
     {
         // Arrange
-        var command = new CreateAnimalTaskCommand(10, "John", SchedulingFrequency.OneOff);
+        var command = new CreateAnimalTaskCommand(10, "John", SchedulingFrequency.OneOff, new DateOnly(2025, 08, 27));
         
         // Act
         var result = _validatorTests.TestValidate(command);
@@ -30,7 +30,7 @@ public class CreateAnimalTaskCommandValidatorTests
     public void GivenInvalidCommand_WhenValidate_ShouldFail(string name)
     {
         // Arrange
-        var command = new CreateAnimalTaskCommand(10, name, SchedulingFrequency.OneOff);
+        var command = new CreateAnimalTaskCommand(10, name, SchedulingFrequency.OneOff, new DateOnly(2025, 08, 27));
         
         // Act
         var result = _validatorTests.TestValidate(command);

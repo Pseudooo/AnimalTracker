@@ -7,4 +7,5 @@ public class AnimalTaskEntity
     public required string Name { get; set; }
     public DateTime CreatedAt { get; set; }
     public required string Frequency { get; set; }
+    public DateOnly ScheduledFor { get; set; }
 }

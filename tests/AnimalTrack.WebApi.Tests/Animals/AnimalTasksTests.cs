@@ -22,10 +22,11 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/3/tasks", UriKind.Relative);
-        var body = new CreateAnimalTaskRequestBody()
+        var body = new AnimalTaskRequestBody()
         {
             Name = "My new task",
             Frequency = SchedulingFrequency.OneOff,
+            ScheduledFor = new DateOnly(2025, 8, 27),
         };
         var jsonOptions = new JsonSerializerOptions()
         {
@@ -44,6 +45,7 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
         createdTask.Name.ShouldBe(body.Name);
         createdTask.Frequency.ShouldBe(body.Frequency);
         createdTask.CreatedAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+        createdTask.ScheduledFor.ShouldBe(body.ScheduledFor);
         await animalTrackFixture.DatabaseFixture.AssertOnDatabaseReader("AnimalTasks", createdTask.Id, reader =>
         {
             reader.HasRows.ShouldBeTrue();
@@ -52,6 +54,8 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
             reader["CreatedAt"].ShouldBeOfType<DateTime>();
             var createdAt = (DateTime)reader["CreatedAt"];
             createdAt.ShouldBeGreaterThan(DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+            var scheduledFor = DateOnly.FromDateTime((DateTime) reader["ScheduledFor"]);
+            scheduledFor.ShouldBe(body.ScheduledFor);
         });
     }
     
@@ -94,10 +98,11 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/tasks/3", UriKind.Relative);
-        var body = new CreateAnimalTaskRequestBody()
+        var body = new AnimalTaskRequestBody()
         {
             Name = "My updated task",
-            Frequency = SchedulingFrequency.Daily,
+            Frequency = SchedulingFrequency.OneOff,
+            ScheduledFor = new DateOnly(2025, 8, 27),
         };
         
         // Act
@@ -109,6 +114,8 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
         {
             reader["Name"].ShouldBe(body.Name);
             reader["Frequency"].ShouldBe(body.Frequency.ToString());
+            var scheduledFor = DateOnly.FromDateTime((DateTime) reader["ScheduledFor"]);
+            scheduledFor.ShouldBe(body.ScheduledFor);
         });
     }
 
@@ -117,10 +124,10 @@ public class AnimalTasksTests(AnimalTasksTests.AnimalTrackTasksFixture animalTra
     {
         // Arrange
         var uri = new Uri("Animal/tasks/99", UriKind.Relative);
-        var body = new CreateAnimalTaskRequestBody()
+        var body = new AnimalTaskRequestBody()
         {
             Name = "my updated task",
-            Frequency = SchedulingFrequency.Daily
+            Frequency = SchedulingFrequency.OneOff
         };
 
         // Act

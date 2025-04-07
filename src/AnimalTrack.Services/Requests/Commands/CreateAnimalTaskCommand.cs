@@ -7,5 +7,6 @@ namespace AnimalTrack.Services.Requests.Commands;
 public record CreateAnimalTaskCommand(
     int AnimalId,
     string Name,
-    SchedulingFrequency Frequency)
+    SchedulingFrequency Frequency,
+    DateOnly ScheduledFor)
     : ICommand<AnimalTaskModel>, IAnimalTaskModel;

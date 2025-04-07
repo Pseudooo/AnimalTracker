@@ -14,10 +14,10 @@ public class AnimalTaskController(IMediator mediator) : ControllerBase
     [HttpPost("{animalId}/tasks")]
     public async Task<ActionResult<AnimalTaskModel>> CreateAnimalTask(
         int animalId,
-        [FromBody] CreateAnimalTaskRequestBody body,
+        [FromBody] AnimalTaskRequestBody body,
         CancellationToken cancellationToken)
     {
-        var command = new CreateAnimalTaskCommand(animalId, body.Name, body.Frequency);
+        var command = new CreateAnimalTaskCommand(animalId, body.Name, body.Frequency, body.ScheduledFor);
         var result = await mediator.Send(command, cancellationToken);
         return result;
     }
@@ -35,10 +35,10 @@ public class AnimalTaskController(IMediator mediator) : ControllerBase
     [HttpPut("tasks/{taskId}", Name = nameof(UpdateAnimalTask))]
     public async Task<IActionResult> UpdateAnimalTask(
         int taskId,
-        [FromBody] CreateAnimalTaskRequestBody body,
+        [FromBody] AnimalTaskRequestBody body,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateAnimalTaskCommand(taskId, body.Name, body.Frequency);
+        var command = new UpdateAnimalTaskCommand(taskId, body.Name, body.Frequency, body.ScheduledFor);
         var result = await mediator.Send(command, cancellationToken);
         if (result)
         {

@@ -3,8 +3,10 @@ using AnimalTrack.Configuration;
 using AnimalTrack.Repository;
 using AnimalTrack.Repository.Interfaces;
 using AnimalTrack.Repository.Repositories;
+using AnimalTrack.Repository.TypeHandlers;
 using AnimalTrack.Services.Extensions;
 using Asp.Versioning;
+using Dapper;
 using Microsoft.OpenApi.Models;
 
 namespace AnimalTrack.WebApi;
@@ -66,6 +68,8 @@ public class Program
             services.AddTransient<IPostgreSqlConnectionFactory, PostgreSqlConnectionFactory>();
             services.AddTransient<IPostgreSqlClient, PostgreSqlClient>();
             services.AddTransient<IAnimalRepository, AnimalRepository>();
+            
+            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         }
     }
 }

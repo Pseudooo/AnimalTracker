@@ -16,6 +16,7 @@ public interface IAnimalRepository
         int animalId,
         string name,
         SchedulingFrequency schedulingFrequency,
+        DateOnly scheduledFor,
         CancellationToken cancellationToken = default);
     
     Task<AnimalEntity?> GetAnimalById(int id, CancellationToken cancellationToken = default);
@@ -39,6 +40,7 @@ public interface IAnimalRepository
         int animalTaskId,
         string name,
         SchedulingFrequency frequency,
+        DateOnly scheduledFor,
         CancellationToken cancellationToken = default);
     
     Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default);

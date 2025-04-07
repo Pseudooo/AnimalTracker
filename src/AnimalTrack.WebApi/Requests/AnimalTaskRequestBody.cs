@@ -3,8 +3,9 @@ using AnimalTrack.ClientModels.Interfaces.Animal;
 
 namespace AnimalTrack.WebApi.Requests;
 
-public class CreateAnimalTaskRequestBody : IAnimalTaskModel
+public class AnimalTaskRequestBody : IAnimalTaskModel
 {
     public required string Name { get; set;  }
     public required SchedulingFrequency Frequency { get; set; }
+    public DateOnly ScheduledFor { get; set; }
 }

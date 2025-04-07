@@ -8,5 +8,6 @@ create table if not exists AnimalTasks
     Name text not null,
     CreatedAt timestamp with time zone not null
         default (now() at time zone 'utc'),
-    Frequency text not null
+    Frequency text not null,
+    ScheduledFor date not null
 )

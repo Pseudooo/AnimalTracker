@@ -6,5 +6,6 @@ namespace AnimalTrack.Services.Requests.Commands;
 public record UpdateAnimalTaskCommand(
     int AnimalTaskId,
     string Name,
-    SchedulingFrequency Frequency)
+    SchedulingFrequency Frequency,
+    DateOnly ScheduledFor)
     : ICommand<bool>, IAnimalTaskModel;

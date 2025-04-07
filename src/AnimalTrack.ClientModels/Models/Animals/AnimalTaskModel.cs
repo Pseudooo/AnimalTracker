@@ -9,4 +9,5 @@ public class AnimalTaskModel : IAnimalTaskModel
     public required string Name { get; set; }
     public DateTime CreatedAt { get; set; }
     public required SchedulingFrequency Frequency { get; set; }
+    public DateOnly ScheduledFor { get; set; }
 }

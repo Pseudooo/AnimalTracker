@@ -30,11 +30,12 @@ public class AnimalRepository(IPostgreSqlClient sqlClient)
         int animalId,
         string name,
         SchedulingFrequency schedulingFrequency,
+        DateOnly scheduledFor,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        var query = new InsertAnimalTaskSqlCommand(animalId, name, schedulingFrequency.ToString());
+        var query = new InsertAnimalTaskSqlCommand(animalId, name, schedulingFrequency.ToString(), scheduledFor);
         return await sqlClient.InsertEntity(query, cancellationToken);
     }
 
@@ -81,11 +82,12 @@ public class AnimalRepository(IPostgreSqlClient sqlClient)
         int animalTaskId,
         string name,
         SchedulingFrequency frequency,
+        DateOnly scheduledFor,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
         
-        var query = new UpdateAnimalTaskSqlSelectQuery(animalTaskId, name, frequency.ToString());
+        var query = new UpdateAnimalTaskSqlSelectQuery(animalTaskId, name, frequency.ToString(), scheduledFor);
         return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 

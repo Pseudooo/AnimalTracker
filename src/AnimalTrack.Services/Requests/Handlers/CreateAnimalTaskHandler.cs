@@ -11,7 +11,12 @@ public class CreateAnimalTaskHandler(IAnimalRepository animalRepository)
 {
     public async Task<AnimalTaskModel> Handle(CreateAnimalTaskCommand request, CancellationToken cancellationToken)
     {
-        var entity = await animalRepository.InsertAnimalTask(request.AnimalId, request.Name, request.Frequency, cancellationToken);
+        var entity = await animalRepository.InsertAnimalTask(
+            request.AnimalId,
+            request.Name,
+            request.Frequency,
+            request.ScheduledFor,
+            cancellationToken);
         if (!Enum.TryParse<SchedulingFrequency>(entity.Frequency, out var schedulingFrequency))
         {
             throw new Exception($"Invalid SchedulingFrequency value for task entity Id={entity.Id}: {schedulingFrequency}");
@@ -23,6 +28,7 @@ public class CreateAnimalTaskHandler(IAnimalRepository animalRepository)
             Name = entity.Name,
             CreatedAt = entity.CreatedAt,
             Frequency = schedulingFrequency,
+            ScheduledFor = entity.ScheduledFor
         };
     }
 }
