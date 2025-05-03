@@ -8,4 +8,5 @@ public class AnimalTaskEntity
     public DateTime CreatedAt { get; set; }
     public required string Frequency { get; set; }
     public DateOnly ScheduledFor { get; set; }
+    public DateOnly? CompletedAt { get; set; }
 }

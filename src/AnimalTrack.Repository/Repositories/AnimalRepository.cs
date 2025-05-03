@@ -91,6 +91,14 @@ public class AnimalRepository(IPostgreSqlClient sqlClient)
         return await sqlClient.RunSingleResultQuery(query, cancellationToken) is not null;
     }
 
+    public async Task<bool> CompleteAnimalTask(
+        int animalTaskId,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new SetAnimalTaskToCompleteQuery(animalTaskId);
+        return await sqlClient.RunSingleResultQuery(command, cancellationToken) is not null;
+    }
+
     public async Task<bool> DeleteAnimalNote(int noteId, CancellationToken cancellationToken = default)
     {
         var command = new DeleteAnimalNoteSqlCommand(noteId);
