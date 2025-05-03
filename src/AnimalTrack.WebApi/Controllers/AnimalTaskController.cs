@@ -49,4 +49,17 @@ public class AnimalTaskController(IMediator mediator) : ControllerBase
             return NotFound();
         }
     }
+
+    [HttpPatch("tasks/{taskId}/complete", Name = nameof(CompleteAnimalTask))]
+    public async Task<IActionResult> CompleteAnimalTask(int taskId, CancellationToken cancellationToken)
+    {
+        var command = new SetAnimalTaskCompleteCommand(taskId);
+        var result = await mediator.Send(command, cancellationToken);
+        if (result)
+        {
+            return NoContent();
+        }
+
+        return NotFound();
+    }
 }

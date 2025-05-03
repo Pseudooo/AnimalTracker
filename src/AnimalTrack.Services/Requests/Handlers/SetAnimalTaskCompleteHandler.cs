@@ -6,8 +6,8 @@ namespace AnimalTrack.Services.Requests.Handlers;
 
 public class SetAnimalTaskCompleteHandler(IAnimalRepository animalRepository) : IRequestHandler<SetAnimalTaskCompleteCommand, bool>
 {
-    public Task<bool> Handle(SetAnimalTaskCompleteCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(SetAnimalTaskCompleteCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await animalRepository.CompleteAnimalTask(request.AnimalTaskId, cancellationToken);
     }
 }

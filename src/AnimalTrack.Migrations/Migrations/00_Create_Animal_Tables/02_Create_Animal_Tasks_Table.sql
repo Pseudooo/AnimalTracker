@@ -9,5 +9,6 @@ create table if not exists AnimalTasks
     CreatedAt timestamp with time zone not null
         default (now() at time zone 'utc'),
     Frequency text not null,
-    ScheduledFor date not null
+    ScheduledFor date not null,
+    CompletedAt timestamp with time zone null
 )
