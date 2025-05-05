@@ -44,6 +44,9 @@ jobs:
           distribution: 'oracle'
           java-version: '21'
           
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+          
       - name: Run Migrations
         working-directory: src/AnimalTrack.Migrations
         run: dotnet run
