@@ -1,0 +1,51 @@
+name: Generate Database Diagram
+on:
+  pull_request: 
+    branches:
+      - master
+  push:
+    paths: 
+      - ./src/AnimalTrack.Migrations/**
+    branches:
+      - master
+
+env:
+  DOTNET_VERSION: 8.x.x
+
+jobs:
+  generate-db-diagram:
+    runs-on: ubuntu-22.04
+    
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: WhatTheFooBar123
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: Setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'oracle'
+          java-version: '21'
+          
+      - name: Run Migrations
+        working-directory: src/AnimalTrack.Migrations
+        run: dotnet run
+          
+      - name: Run SchemaSpy
+        shell: bash
+        run: ./.github/scripts/run-schema-spy.sh
