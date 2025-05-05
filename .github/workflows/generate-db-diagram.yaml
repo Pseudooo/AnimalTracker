@@ -50,4 +50,6 @@ jobs:
           
       - name: Run SchemaSpy
         shell: bash
-        run: ./.github/scripts/run-schema-spy.sh
+        run: |
+          chmod +x ./.github/scripts/run-schema-spy.sh
+          ./.github/scripts/run-schema-spy.sh
