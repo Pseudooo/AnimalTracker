@@ -51,4 +51,4 @@ jobs:
         run: npm install -g pg-mermaid
         
       - name: Generate Diagram
-        run: pg-mermaid --dbname AnimalTrack --username postgres --password WhatTheFooBar123 --host 127.0.0.1 --port 5432 --output-path
+        run: pg-mermaid --dbname AnimalTrack --username postgres --password WhatTheFooBar123 --host 127.0.0.1 --port 5432 --output-path ./db-schema.md
