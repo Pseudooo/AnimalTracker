@@ -41,14 +41,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 14.15.0
+          node-version: 22.14.0
           
       - name: Run Migrations
         working-directory: src/AnimalTrack.Migrations
         run: dotnet run
 
       - name: Install pg-mermaid
-        run: npm install -g pg-mermaid --save-dev "tslib@2.5.0"
+        run: npm install -g pg-mermaid
         
       - name: Generate Diagram
         run: pg-mermaid --dbname AnimalTrack --username postgres --password WhatTheFooBar123 --host 127.0.0.1 --port 5432 --output-path
