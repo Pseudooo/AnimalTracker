@@ -33,26 +33,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup dotnet ${{ matrix.dotnet-version }}
+      - name: Setup dotnet ${{ env.DOTNET_VERSION }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           
-      - name: Setup java
-        uses: actions/setup-java@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          distribution: 'oracle'
-          java-version: '21'
-          
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
+          node-version: 14.15.0
           
       - name: Run Migrations
         working-directory: src/AnimalTrack.Migrations
         run: dotnet run
           
-      - name: Run SchemaSpy
-        shell: bash
-        run: |
-          chmod +x ./.github/scripts/run-schema-spy.sh
-          ./.github/scripts/run-schema-spy.sh
+      - name: Install pg-mermaid
+        run: npm install -g pg-mermaid
+        
+      - name: Generate Diagram
+        run: pg-mermaid --dbname AnimalTrack --username postgres --password WhatTheFooBar123 --host 127.0.0.1 --port 5432 --output-path
